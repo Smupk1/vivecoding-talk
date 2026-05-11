@@ -1,6 +1,6 @@
 # Setup · Para estudiantes / For students
 
-> 🇪🇸 Vení con esto instalado **antes del workshop**. Si llegás sin esto, el `pnpm install` te va a comer la mitad del bloque hands-on.
+> 🇪🇸 Ven con esto instalado **antes del workshop**. Si llegas sin esto, el `pnpm install` te va a comer la mitad del bloque hands-on.
 >
 > 🇬🇧 Have this installed **before the workshop**. If you arrive without it, `pnpm install` will eat half the hands-on block.
 
@@ -14,7 +14,7 @@
 node --version   # debería decir v20.x.x o más
 ```
 
-Si no lo tenés: [nodejs.org](https://nodejs.org/) o usá [fnm](https://github.com/Schniz/fnm) / [nvm](https://github.com/nvm-sh/nvm).
+Si no lo tienes: [nodejs.org](https://nodejs.org/) o usa [fnm](https://github.com/Schniz/fnm) / [nvm](https://github.com/nvm-sh/nvm).
 
 ### 2. pnpm
 
@@ -35,16 +35,16 @@ gh auth login
 
 ### 4. Cuenta en Cloudflare (gratuita)
 
-[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) — solo para el bloque de deploy. **No te piden tarjeta** para el plan free.
+[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) — solo para el bloque de deploy. **No piden tarjeta** para el plan free.
 
 ### 5. Editor con plugin para AI coding (opcional pero ideal)
 
-Elegí UNA:
+Elige UNA:
 - **[Cursor](https://cursor.sh/)** — VS Code fork con AI integrado (recomendado para el workshop)
 - **[VS Code + Continue](https://www.continue.dev/)** — alternativa open-source
 - **[Claude Code](https://www.anthropic.com/claude-code)** — CLI agéntico
 
-### 6. Clonar los repos (hacelo en casa)
+### 6. Clonar los repos (hazlo en casa)
 
 ```bash
 mkdir -p ~/workshop && cd ~/workshop
@@ -70,6 +70,8 @@ pnpm dev
 ```
 
 Si los dos comandos arrancaron sin error, estás listo. ✅
+
+> *Vibecoding es roleplay. Vivecoding es una campaña con disciplina.*
 
 ---
 

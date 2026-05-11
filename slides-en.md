@@ -2,250 +2,298 @@
 marp: true
 theme: default
 paginate: true
-backgroundColor: "#0f172a"
-color: "#e2e8f0"
+backgroundColor: "#0a0a0a"
+color: "#e8e8e8"
 style: |
   section { font-family: 'Inter', system-ui, sans-serif; padding: 60px; }
-  h1 { color: #38bdf8; font-weight: 800; }
-  h2 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 8px; }
-  code { background: #1e293b; padding: 2px 8px; border-radius: 4px; color: #fde68a; }
-  pre { background: #1e293b !important; border-radius: 8px; padding: 16px; }
-  blockquote { border-left: 4px solid #38bdf8; padding-left: 16px; color: #94a3b8; font-style: italic; }
-  strong { color: #fde68a; }
-  em { color: #f472b6; }
-  table { font-size: 22px; }
+  h1 { color: #d4af37; font-weight: 800; letter-spacing: -0.02em; }
+  h2 { color: #d4af37; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; font-weight: 700; }
+  h3 { color: #8b9eff; }
+  code { background: #1a1a1a; padding: 2px 8px; border-radius: 3px; color: #f4d03f; font-size: 0.85em; }
+  pre { background: #111 !important; border: 1px solid #2a2a2a; border-radius: 6px; padding: 18px; font-size: 0.7em; }
+  blockquote { border-left: 3px solid #d4af37; padding-left: 18px; color: #a0a0a0; font-style: italic; margin: 20px 0; }
+  strong { color: #f4d03f; }
+  em { color: #c084fc; }
+  table { font-size: 22px; border-collapse: collapse; }
+  th, td { padding: 8px 14px; border-bottom: 1px solid #2a2a2a; }
+  th { color: #d4af37; text-align: left; }
   .center { text-align: center; }
   .small { font-size: 22px; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ul li { margin: 6px 0; }
 ---
 
 <!-- _class: center -->
 
-# Vibe Coding
+# Vivecoding
 
-## It's not "copy-pasting from ChatGPT"
-## It's **directing models** to build real software
+## AI-assisted engineering as a **campaign**, not a roll of the dice
 
 <br>
 
 **Workshop · 90 min · Hands-on**
 
+<br>
+
+<span class="mono" style="color:#666;font-size:14px">Samuel Cala · vivecoding.dev</span>
+
 ---
 
-<!-- _class: center -->
+## Who I am
 
-## Who am I
+**Samuel Cala** — Security Engineer at IT Audit Labs
 
-**[Your name]** — Senior Architect, 15+ years building software
+SOC operations · SOAR automation · Security development
 
-GDE · MVP · occasional teacher
+Today: 90 minutes. Two real projects. One thesis.
 
-Today: 90 min, two real demos, one core idea
+<br>
+
+> Vibecoding is roleplay. **Vivecoding is a campaign with discipline.**
 
 ---
 
 ## Workshop rules
 
-1. **This is practice, not performance.** You'll clone, break, and fix.
-2. **Questions don't wait.** Interrupt me.
-3. **If I don't know something, I'll say so.** You can too.
-4. **Don't copy what you don't understand.** That's the whole point of this talk.
+01. This is **practice**, not performance. You'll clone, break, fix.
+02. Questions don't wait. Interrupt me.
+03. If I don't know something, I'll say so. You can too.
+04. **Don't copy what you don't understand.** That's the whole talk in one line.
 
 ---
 
-# Block 1
-## What is vibe coding?
+<!-- _class: center -->
 
-<br>
+# Cold Open
 
-> _"There's a new kind of coding I call vibe coding, where you fully give in to the vibes, embrace exponentials, and forget that the code even exists."_
->
-> — Andrej Karpathy, Feb 2025
+## *"Did you vibe code it?"*
 
 ---
 
-## What vibe coding is NOT
+## The story
 
-❌ Copy-pasting from ChatGPT without reading
+When I joined IT Audit Labs, the first question my boss asked me was:
 
-❌ "The model writes, I clap"
+> *"Did you *vibe code* it?"*
 
-❌ Stop learning because "AI's got it now"
+I didn't know what the term meant. Went home and googled it. Felt a little ashamed for using ChatGPT to help me ship.
 
-❌ Producing code you can't maintain
+A few weeks later, my boss stood at a whiteboard and said:
 
----
+> *"You're pronouncing it wrong. It's **vibe** coding, not **vive** coding."*
 
-## What vibe coding IS
+He was right that I was saying it wrong.
 
-✅ **You** decide the architecture, the model executes
-
-✅ Iterate 10× faster on **ideas you already understand**
-
-✅ Use the model as a **judgment multiplier**, not a replacement
-
-✅ **Constant push-back**: if the model's wrong, you argue with it
+**He was wrong that it was a mistake.**
 
 ---
 
-## The honest question
-
-<br>
-
-# Why NOW?
-
-<br>
-
-LLMs crossed a threshold in 2024-2025:
-
-- Long context (1M tokens) → they understand your whole codebase
-- Reliable tool use → multi-step task execution
-- Code reasoning → not just autocomplete
-
-**Prototyping cost dropped ~10×. Maintenance cost did not.**
+# Act I
+## Vibecoding vs Vivecoding
 
 ---
 
-# Block 2
-## The two deadly traps
+## The thesis, in one chart
+
+| | **Vibecoding** | **Vivecoding** |
+|---|---|---|
+| **Philosophy** | Roll a d20. Pray. | Engineering discipline + AI as amplifier |
+| **Specs** | None | Before code. Always. |
+| **Pipeline** | Prompt → ship | explore → spec → design → apply → verify |
+| **Models** | One, for everything | Multi-model with cross-check |
+| **Tests** | Optional | Strict TDD. Authz invariants. |
+| **Code review** | "It compiles, so it works" | On every PR. No exceptions. |
+| **Tech debt** | Grows faster than you can write | AI amplifies the engineer, not the reverse |
+
+**Same tools. Same models. *Different discipline.***
 
 ---
 
-## Trap 1
-### Vibe coding without foundations
+## The vibecoder
+
+Rolls a d20. Ships whatever the model spits out.
 
 <br>
 
-You want to build an app with React.
+## The vivecoder
 
-You don't know what the DOM is.
+Treats AI as **the most powerful junior they've ever managed**, and applies the same engineering rigor they'd apply to any other contributor.
 
-You don't know what a bundler is.
-
-You don't know what an HTTP request is.
-
-<br>
-
-> _How will you **debug** something you don't understand?_
+Because the alternative is **tech debt that compounds faster than you can write code.**
 
 ---
 
-## The uncomfortable truth
+## Why does this matter NOW?
+
+LLMs crossed a threshold between 2024 and 2025:
+
+- **Long context** (1M+ tokens) → understand entire codebases
+- **Reliable tool use** → execute multi-step work
+- **Code reasoning** → not just autocomplete
 
 <br>
 
-# The model doesn't teach you
+**Prototyping cost dropped ~10×.**
+**Maintenance cost did not.**
 
-<br>
-
-The model **accelerates what you already know** and **hides what you don't**.
-
-If you don't understand async/await, the code will "work" until it breaks in production at 3am.
-
-**Fundamentals aren't optional. They're the difference between directing and being directed.**
+That gap is where vivecoding lives.
 
 ---
 
-## Trap 2
-### Believing the model "knows"
-
-<br>
-
-The model is a **statistical predictor of text**.
-
-It doesn't "reason" like you. It doesn't "verify" its output.
-
-It confuses APIs. Invents functions. Forgets types.
-
-> _If you don't read its code, you're not programming — you're **publishing**._
+# Act II
+## The stack: specialized agents
 
 ---
 
-## Quick discussion (3 min)
+## One model is never the right answer
 
-<br>
+Each model has a strength. **The mix is the moat.**
 
-When, in your experience, did an AI give you code that **looked right** but was wrong?
+| Model | Role | What for |
+|---|---|---|
+| **Gemini** | Planner | Documentation, planning, SDDs, long context |
+| **Claude** | Builder | Implementation, refactor, the code that ships |
+| **Cloudflare Workers AI** | Fallback | Llama/Kimi at the edge, cheap fast iteration |
+| **Codex** | Hunter | Bug bounty, error hunting, adversarial diff pass |
+| **CodeRabbit + Copilot** | Safety net | Two reviewers, every merge. No exceptions. |
 
-<br>
+The vibecoder picks one and prays.
 
-How did you discover it?
+The vivecoder runs five — **because each one is wrong sometimes, and the only way you find out is when another one disagrees.**
 
 ---
 
-# Block 3
-## Hands-on 1: Portfolio with Astro
+## The support agents
+
+**Engram** — Persistent memory (RAG). Every decision, observation, and CVE persists. Next session knows what the last session learned. Nothing important lives only in chat history.
+
+**Gentle** — Grounding companion. Lands me when I'm spiraling. *"No, we're not doing that tonight at 10pm."*
+
+**Warlock** — Security auditor. Caught **two real CVEs in 48 hours** that human review wouldn't have caught.
 
 <br>
+
+Each does their job. I orchestrate.
+
+---
+
+## The SDD pipeline (Spec-Driven Development)
+
+```
+/sdd-init     →  detect stack & conventions
+   ↓
+/sdd-explore  →  scout the terrain
+   ↓
+/sdd-propose  →  intent + scope + approach
+   ↓
+/sdd-spec     →  requirements + scenarios   ──┐
+   ↓                                           ├→ /sdd-tasks → /sdd-apply → /sdd-verify → /sdd-archive
+/sdd-design   →  architecture decisions     ──┘
+```
+
+Spec and design feed tasks **in parallel**. Verify is a gate, not a vibe. Archive syncs and closes.
+
+**The same SDLC you learned in school. Now executable.**
+
+---
+
+## Why it scales
+
+No agent — and no human — has to hold the whole project in their head.
+
+**The DAG holds it.**
+
+Each phase has clear preconditions, clear outputs, and a clear handoff to the next.
+
+<br>
+
+> This is the difference between "I'm juggling five balls" and "I have a system that knows where each ball is."
+
+---
+
+# Hands-on I
+## Astro Portfolio
+
+---
+
+## The first project
 
 **Repo**: `Smupk1/astro-portfolio-demo`
 
 ```bash
 cd ~/workshop/astro-portfolio-demo
 pnpm dev
+# → localhost:4321
 ```
 
-Open `localhost:4321`
+**Stack**: Astro 6 + Cloudflare Workers, global edge deploy in one command.
 
 ---
 
-## What's here?
-
-- **Astro 6** — component-based static site generator
-- **Zero React, zero Vue** — HTML + CSS + JS vanilla with `.astro`
-- **Deploy to Cloudflare Workers** — global, free
-
-<br>
-
-**Conceptual takeaways** (for CS upper-year):
-
-1. **Islands Architecture**: the site is static HTML; only "islands" hydrate JS where needed. Compare mentally with Next.js pure SSR.
-2. **Zero JS by default** — the opposite of "everything is React" SPA.
-
----
-
-## Experiment (5 min)
-
-<br>
-
-Open `src/styles/global.css`.
-
-Change the palette to **your university's colors**.
-
-<br>
-
-While doing it, **observe**: Astro's hot reload. The latency. How little it takes.
-
-How many times did you deploy to prod to verify a color change when you started? 😅
-
----
-
-## Why Astro instead of Next.js
+## Why Astro instead of Next.js?
 
 | Astro | Next.js |
 |---|---|
 | HTML by default, JS optional | JS by default, HTML optional |
+| Initial bundle: ~0 kb JS | Initial bundle: 80-100 kb JS |
+| Selective hydration (islands) | Full hydration |
 | Ideal for content sites | Ideal for stateful apps |
-| Initial bundle: ~0 kb JS | Initial bundle: ~80-100 kb JS |
-| Selective hydration | Full hydration |
 
-**Rule**: if your site is 80% content, 20% interactivity → Astro. If it's the opposite → React/Next.
+**Rule**: if your site is 80% content, 20% interactivity → Astro. Reverse → Next.
 
 ---
 
-# Block 4
-## Hands-on 2: Library with Cloudflare Workers
+## Key technical concept
+
+Astro **inverts the React model's default**:
+
+- In React/Next, **everything is JS** until you explicitly ask for static (Server Components, RSC).
+- In Astro, **everything is HTML** until you explicitly ask for hydration (`client:load`, `client:idle`, `client:visible`).
 
 <br>
 
-**Repo**: `Smupk1/biblioteca-cloudflare-demo`
-
-**Stack**: Workers + D1 + Durable Objects + Hono
-
-Three Cloudflare free-tier primitives in one project.
+> This inversion isn't just performance. It's **design**: it changes which decisions you make without thinking.
 
 ---
 
-## Cloudflare free plan
+## Live practice · 5 minutes
+
+Open `src/styles/global.css`.
+
+Change the palette to your university's colors.
+
+While doing it, **observe**: the hot-reload latency. How little it takes. How cheap iteration is.
+
+<br>
+
+How many times did you deploy to production to verify a color change when you started?
+
+---
+
+# Hands-on II
+## Library with Cloudflare Workers + D1 + Durable Objects
+
+---
+
+## The second project
+
+**Repo**: `Smupk1/biblioteca-cloudflare-demo`
+
+**Stack**: Workers + D1 (SQL) + Durable Objects + Hono
+
+Three Cloudflare free-tier primitives in one project.
+
+```bash
+cd ~/workshop/biblioteca-cloudflare-demo
+pnpm db:migrate:local
+pnpm db:seed:local
+pnpm dev
+# → localhost:8787
+```
+
+---
+
+## Cloudflare's free plan
 
 | Service | Free tier |
 |---|---|
@@ -257,7 +305,7 @@ Three Cloudflare free-tier primitives in one project.
 
 <br>
 
-**Bottom line**: an entire class can hammer this without it costing a cent.
+A whole class can hammer this stack and it costs zero.
 
 ---
 
@@ -273,204 +321,261 @@ Three Cloudflare free-tier primitives in one project.
                             │   D1    │    │ Durable Obj  │
                             │ (SQL)   │    │  Sessions    │
                             └─────────┘    └──────────────┘
-                            users,books    token→userId
+                            users,books    token → userId
 ```
-
----
-
-## Live setup (5 min)
-
-```bash
-cd ~/workshop/biblioteca-cloudflare-demo
-pnpm db:migrate:local
-pnpm db:seed:local
-pnpm dev
-```
-
-Open `localhost:8787`
-
-Register · login · add book · refresh stats
 
 ---
 
 ## Why a Durable Object for sessions?
 
-<br>
-
-# This is **the** question of the talk
-
-<br>
-
-Let's discuss.
-
----
-
-## Alternatives for storing sessions
-
 | Option | Problem |
 |---|---|
-| `Map` in Worker memory | Each request may land on a different node. **No persistence.** |
-| Signed cookie (JWT) | Works, but **can't be invalidated** without a blacklist |
-| D1 (`sessions` table) | Works, but every token validation = 1 SQL query |
+| `Map` in Worker memory | Each request may hit a different node. No persistence. |
+| Signed cookie (JWT) | Works, but can't be invalidated without a blacklist |
+| D1 (`sessions` table) | Works, but every validation = one SQL query |
 | **Durable Object** | ONE global instance, in-memory + persistent |
 
----
-
-## The key mental model
-
 <br>
 
-**Workers** are **stateless** by design — execute and die.
-
-**DOs** are **stateful** by design — live, remember, are consistent.
-
-<br>
-
-> When you need **a single consistent point** in the world (sessions, rate limiting, counters, chat rooms) → DO.
->
-> For everything else → Worker + D1.
+> **Workers** are stateless by design. **DOs** are stateful by design. For sessions, rate limiting, counters, rooms — always DO.
 
 ---
 
 ## DO consistency model
 
-<br>
-
 **Single-threaded per instance.** If two requests modify the same session, they serialize.
 
-**No race conditions** inside a DO. This is huge.
+**Zero race conditions** inside a DO. This is huge.
 
 <br>
 
-> Compare with thinking about `SELECT ... FOR UPDATE` in Postgres.
->
-> Inside a DO the problem doesn't exist — it's sequential by design.
+Compare with having to think about `SELECT ... FOR UPDATE` in Postgres.
+
+Inside a DO the problem **doesn't exist** — it's sequential by design.
 
 ---
 
-# Block 5
-## Vibe coding in action
+## The rule that generalizes
+
+# Every AI tool is an authenticated endpoint.
 
 <br>
 
-## Let's add a feature **together**
+If you wouldn't expose the underlying operation as an unguarded REST call, **you can't expose it as an unguarded tool either.**
+
+The Zod schema on a tool is not a security boundary. **The handler is.**
+
+---
+
+# Case study
+## Two real CVEs in 48 hours
+
+---
+
+## CVE #1 — `requireOrgAdmin()`
+
+**The bug.** Any member of an organization was treated as **admin automatically**, regardless of role.
+
+Looked intentional. The pattern was old. Nobody questioned it.
+
+It would have lived in production for months.
 
 <br>
 
-**Feature**: mark a book as "loaned to user X"
+**How the system caught it:** the security agent ran an unprompted audit, chained with the code-review skill. Confirmed: *this is a real privilege-escalation bug, not a design choice.*
 
-We need: new column in D1, new endpoint, updated UI.
+**Lesson:** *What looks like a feature is sometimes a CVE.*
 
 ---
 
-## Bad prompt vs good prompt
+## CVE #2 — Cross-tenant leak in an AI tool
+
+**The bug.** The `get_ticket_detail` tool of an AI assistant fetched **any ticket by ID via service account**. No ownership check.
+
+A user in tenant A could ask the assistant for a ticket from tenant B, and the assistant handed it over.
 
 <br>
 
-❌ **Bad prompt**:
-> "Add loaning to the CRUD"
+**How the system caught it:** during the security audit phase of the overhaul, **before production**.
 
-✅ **Good prompt**:
-> "In the biblioteca repo, I want to add a loan system.
-> Schema: new `loans` table (id, book_id, user_id, taken_at, returned_at).
-> Endpoint: `POST /api/books/:id/borrow` (auth required) that creates the loan
-> and sets `disponible=0`. If already loaned, return 409.
-> Show me the plan before touching code."
+**Fix:** replicate the REST endpoint's access control inside the tool.
+
+**Lesson generalizes:** *every AI tool is an authenticated endpoint.*
 
 ---
 
-## What changes between the two prompts
-
-| Bad prompt | Good prompt |
-|---|---|
-| You leave everything to the model | You decide the shape |
-| Model invents the schema | You pass the schema |
-| Model picks the status code | You pick `409 Conflict` |
-| Model gives you code | You ask for the **plan first** |
-
-**Who's directing here?**
+# The five scars
+## If a talk only shows wins, they're selling you something
 
 ---
 
-## Live exercise (10 min)
+## Scars from the same campaign
+
+01. **CF Workers AI** too slow + bad at instructions. Migrated to Anthropic API with fallback.
+
+02. **`ts-node` broke on extensionless ESM imports.** One session lost. Fix: switch to `tsx`.
+
+03. **14 components rendering raw HTML entities.** MS Graph returns them encoded. Decode in every component.
+
+04. **`client:load` hydration mismatch with `sessionStorage`.** Switched to `client:only="react"`.
+
+05. **Zendesk POST had no retry.** SDD didn't catch it. **The user did.**
 
 <br>
 
-Each of you, on your machine, with your editor + AI:
-
-**Add the endpoint `POST /api/books/:id/borrow`**
-
-Rules:
-1. Ask the model for the **plan before the code**
-2. Push back on at least ONE decision
-3. When the code compiles, **explain to your partner what it does**
+> The workflow is good. **It's not magic.** User feedback is still irreplaceable.
 
 ---
 
-# Block 6
-## When NOT to vibe code
+# The 5 rules
+## What the vibecoder gets wrong
 
 ---
 
-## The five danger zones
+## Rule 01
 
-1. **Security-critical code** (auth, crypto, payments) — read every line
-2. **Algorithms with invariants** — the model doesn't "reason" about invariants
-3. **Production DB migrations** — one wrong drop table and it's over
-4. **Code YOU couldn't write yourself** — if you don't understand it, you can't maintain it
-5. **When the model defaults to "most common"** — old APIs, outdated patterns
+# Specs before code. Always.
+
+If you can't write the spec, **you don't understand the change.**
+
+Stop typing prompts.
 
 ---
 
-## The $10,000 question
+## Rule 02
+
+# One model is never the right answer.
+
+Each model has a strength. The mix is the moat.
+
+Plan, build, audit — **different agents.**
+
+---
+
+## Rule 03
+
+# Design is code. Merge it.
+
+Architecture decisions live in version control, **next to the code that proves them.**
+
+Not in Notion. Not in Confluence. **In the repo.**
+
+---
+
+## Rule 04
+
+# "It compiles" ≠ "it works."
+
+Verify is a phase, not a vibe.
+
+Tests, invariants, authz checks. **Don't skip verification.**
+
+---
+
+## Rule 05
+
+# The AI is your junior, not your genius.
+
+You wouldn't merge a junior's PR without reading it.
+
+**Don't merge the AI's either.**
+
+---
+
+# The number
+
+## From baseline to vivecoding
 
 <br>
 
-> _If this breaks at 3am, can you debug it?_
+# 6 months → 1 month
 
 <br>
 
-If the answer is **no** → it's not vibe coding, it's **vibe shipping**.
+Production. Multi-tenant. 78 tests passing. Two security audits.
 
-And vibe shipping will get you fired.
+**Speed didn't come from skipping steps.**
 
----
-
-# Wrap up
-
-## Takeaways from this workshop
-
-1. **Vibe coding is a tool, not an identity.** Sometimes yes, sometimes no.
-2. **Fundamentals are non-negotiable.** Concepts > code.
-3. **The human leads.** If the model directs, you've lost.
-4. **Constant push-back.** If the model's wrong, tell it.
-5. **Astro + Cloudflare Workers** = beautiful stack, free, teaches modern concepts.
+It came from **parallelizing the right steps with the right models.**
 
 ---
 
-## Resources
-
-- 📚 [Astro Docs](https://docs.astro.build)
-- ⚡ [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
-- 🔥 [Hono](https://hono.dev/)
-- 🤖 [Claude Code](https://www.anthropic.com/claude-code)
-- 🎯 [Cursor](https://cursor.sh/)
-- 📖 Karpathy on vibe coding: [twitter.com/karpathy](https://twitter.com/karpathy)
-
-<br>
-
-**Workshop repos:**
-- `github.com/Smupk1/astro-portfolio-demo`
-- `github.com/Smupk1/biblioteca-cloudflare-demo`
+# Three things to take home
 
 ---
 
 <!-- _class: center -->
 
-# Thanks
+## 01 · The Thesis
 
-## Questions?
+# Discipline beats vibes.
+
+Specs, design, TDD, verify.
+
+The classical SDLC — now executable.
+
+---
+
+<!-- _class: center -->
+
+## 02 · The Stack
+
+# Right model, right job.
+
+One model is never the right answer.
+
+The mix is the moat.
+
+---
+
+<!-- _class: center -->
+
+## 03 · The Math
+
+# AI is an amplifier.
+
+It doesn't replace the engineer.
+
+It makes a trained one **6× faster.**
+
+---
+
+<!-- _class: center -->
+
+<br><br>
+
+# Vibecoding is roleplay.
+
+# Vivecoding is a campaign with discipline.
 
 <br>
 
-Talk to each other too — the best way to understand something is to explain it to someone else.
+<span class="mono" style="color:#666">vivecoding.dev</span>
+
+---
+
+## Resources
+
+**Workshop repos:**
+- `github.com/Smupk1/astro-portfolio-demo`
+- `github.com/Smupk1/biblioteca-cloudflare-demo`
+
+**Full manifesto:**
+- vivecoding.dev/writing/vibecoding-vs-vivecoding
+
+**Workshop stack:**
+- [Astro](https://docs.astro.build) · [Cloudflare Workers](https://developers.cloudflare.com/workers/) · [Hono](https://hono.dev/) · [Drizzle](https://orm.drizzle.team/)
+
+---
+
+<!-- _class: center -->
+
+# Questions
+
+<br>
+
+Disagree publicly. I'll listen.
+
+<br>
+
+<span class="mono" style="color:#666;font-size:14px">Samuel Cala · linkedin.com/in/samuelsapontec</span>

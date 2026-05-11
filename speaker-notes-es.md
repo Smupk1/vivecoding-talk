@@ -1,276 +1,347 @@
-# Speaker Notes — Vibe Coding Workshop (Español)
+# Speaker Notes — Vivecoding Workshop (Español)
 
-> Notas extendidas para el orador. Lo que decir, dónde pausar, qué preguntas hacer, dónde podés perder a la audiencia.
+> Guion ampliado. Qué decir, dónde pausar, qué preguntar, dónde puedes perder a la audiencia.
 
-**Audiencia**: estudiantes de CS de años superiores. Ya programan. Saben qué es una API, una base de datos, una request HTTP. No insultes su inteligencia explicando lo básico — pero tampoco asumas que ya pensaron en arquitectura.
+**Audiencia**: estudiantes universitarios de CS, años superiores. Ya programan. Saben qué es una API, una base de datos, una request HTTP.
 
-**Duración total**: 90 minutos. Llevá un cronómetro discreto.
+**Duración**: 90 minutos. Lleva un cronómetro.
+
+**Tono**: directo, primera persona, sin adornos. Cuenta historias específicas. Cuando algo no lo sepas, dilo.
 
 ---
 
-## Bloque 1: ¿Qué es vibe coding? (min 5-15, 10 min)
+## Setup (min 0-5)
 
-### Lo que decir
+Pide que cada uno corra:
 
-> "Antes de tirar código, pongámonos de acuerdo en qué estamos hablando.
+```bash
+cd ~/workshop/astro-portfolio-demo && pnpm dev
+```
+
+Mientras verifica que arranque, abre tú la primera slide.
+
+Si alguien llega sin haber corrido `setup.md`, **no lo esperes**. Que arranque mientras tú avanzas.
+
+---
+
+## Cold Open: "Did you vibe code it?" (min 5-10)
+
+### Qué decir
+
+Cuenta la historia tal cual está en el manifiesto. No la dramatices, no la adornes — es buena por sí sola.
+
+> "Cuando entré a IT Audit Labs, mi jefe me preguntó: *¿Lo vibe codeaste?*. Yo no sabía qué significaba. Sentí vergüenza. Lo googleé esa noche.
 >
-> En febrero de 2025, Andrej Karpathy — uno de los creadores de OpenAI, después en Tesla — tuiteó un término: **vibe coding**.
+> Semanas después, me corrigió: *Es vibe coding, no vive coding.*
 >
-> Su definición original era casi una broma: 'te entregás a la vibra, te olvidás de que el código existe'. Pero el término se viralizó y se distorsionó.
+> Tenía razón en que lo decía mal. Estaba equivocado en que era un error."
+
+Pausa larga aquí. Deja que la frase aterrice.
+
+### Por qué importa
+
+Esta no es una charla sobre semántica. Es una charla sobre **disciplina**. La historia del whiteboard te da licencia para hablar del tema sin sonar como un evangelista de IA más.
+
+---
+
+## Acto I: Vibecoding vs Vivecoding (min 10-20)
+
+### El cuadro
+
+Cuando muestres la tabla, **no la leas**. Coméntala fila por fila:
+
+> "Philosophy. El vibecoder tira un d20 y reza. El vivecoder trata a la IA como el junior más poderoso que ha manejado.
 >
-> Hoy lo usan dos campos opuestos:
-> - Los **fans**: 'es el futuro, no necesitamos saber programar'
-> - Los **críticos**: 'es una receta para el desastre'
->
-> Yo creo que **los dos están equivocados**, y por eso esta charla."
+> Specs. El vibecoder no las escribe. El vivecoder las escribe *antes* del código. Si no puedes escribir el spec, no entiendes el cambio. Punto."
 
-### Pausa y pregunta
+Sigue así. Tres filas son suficientes — no recorras las siete o pierdes la atención.
 
-> "Levantá la mano si alguna vez usaste GitHub Copilot, Cursor, ChatGPT o Claude para escribir código que después comiteaste a producción."
+### El cierre del cuadro
 
-(Espera 5 segundos. Vas a ver 80% de manos arriba.)
+> "Misma herramienta. Mismos modelos. Disciplina distinta. **Esa es la charla completa.** El resto son 80 minutos de evidencia."
 
-> "Buenísimo. La pregunta no es **si** lo usás. La pregunta es **cómo**."
+### Discusión rápida (3 min)
 
-### Lo que NO es vibe coding (slide)
+> "Levanten la mano si han usado Copilot, Cursor, ChatGPT o Claude para escribir código que después comitearon a producción."
 
-Pasá rápido. Es obvio. Pero el punto es **anclar** que no estamos hablando de la versión naive.
+Espera. Vas a ver 80% de manos arriba.
 
-### Lo que SÍ es vibe coding (slide)
-
-Detenete acá. Especialmente en el tercer punto:
-
-> "**Multiplicador de criterio**. Esa palabra es clave. Si tu criterio es malo, el modelo te lo multiplica. Si tu criterio es bueno, también. La IA no es un nivelador — es un amplificador."
+> "Bien. La pregunta no es *si* lo usan. La pregunta es **cómo**."
 
 ### Why now
 
-Tres puntos rápidos. Si alguien pregunta por benchmarks, mencioná:
-- GPT-4 (2023) podía escribir funciones aisladas
-- Claude 3.5 / GPT-4o (2024) podían navegar codebases
-- Claude 4.x / Sonnet 4.6+ (2025-2026) pueden ejecutar trabajo agentico de horas
+Tres puntos rápidos. Si alguien pregunta benchmarks específicos:
 
-**Trampa que ya viste**: alguien va a preguntar "¿pero entonces no van a reemplazar a los programadores?". Respuesta:
+- GPT-4 (2023) — funciones aisladas
+- Claude 3.5 / GPT-4o (2024) — navegan codebases
+- Claude 4.x (2025-2026) — trabajo agéntico de horas
 
-> "Van a reemplazar a los programadores que **no usen** IA. No a los que la usen bien. Es la misma historia que con cualquier herramienta que multiplica productividad — calculadoras, IDEs, internet. El trabajo se mueve hacia arriba en la cadena de abstracción."
+**Trampa que vas a ver**: alguien va a preguntar *"¿no van a reemplazarnos?"*. Respuesta:
 
----
-
-## Bloque 2: Las dos trampas mortales (min 15-25, 10 min)
-
-### Trampa 1: Sin fundamentos
-
-**Acá tenés que ponerle fuerza.** Es el punto central de la charla. No te aceleres.
-
-> "Hay una analogía que uso siempre: imagínense que les regalan una excavadora industrial. Sin haber manejado nunca ni un auto.
->
-> ¿Pueden 'usarla'? Sí. Pueden encenderla, mover una palanca, hacer un movimiento.
->
-> ¿Saben **lo que están haciendo**? No. Y la primera vez que algo salga mal — y va a salir mal — no van a saber ni por dónde empezar.
->
-> Eso es vibe coding sin fundamentos."
-
-### Pausa y mostrá el slide "El modelo no te enseña"
-
-> "Esto es contraintuitivo. La gente cree que como el modelo 'te explica', te enseña.
->
-> No te enseña. Te **da la respuesta**. Y darte la respuesta es la forma más rápida de **no aprender**.
->
-> Pensá: ¿cuántas veces, en clase, el profe les dijo 'no les voy a dar la fórmula, intenten derivarla'? Esa fricción es donde se aprende.
->
-> El modelo elimina toda esa fricción. Por eso es peligroso si no la reinstalás vos a propósito."
-
-### Trampa 2: Creer que el modelo "sabe"
-
-> "El modelo es un predictor estadístico. Eso suena despectivo, pero no lo es. Es una descripción técnica.
->
-> Lo que significa: el modelo predice **el próximo token más probable** dado el contexto. Y a veces, lo más probable **no es lo correcto**.
->
-> Ejemplo real: pídanle a cualquier modelo que use una API que cambió entre versiones. Va a usar la versión vieja, porque era 'lo más común' en sus datos de entrenamiento.
->
-> ¿La solución? Leer su output. Cuestionarlo. Pasarle docs actualizadas. **Dirigirlo**."
-
-### Discusión de 3 minutos
-
-Esto es clave. **Hacé que hablen entre ellos primero** (2 min), después escuchá 2-3 ejemplos al aire.
-
-Si nadie habla, tirá vos un ejemplo personal: una vez Claude me inventó una función de `crypto.subtle` que no existe. Compiló porque TS no lo agarró. Rompió en runtime.
+> "Van a reemplazar a los que no usen IA. No a los que la usen bien. Es la misma historia con cualquier herramienta que multiplica productividad. El trabajo se mueve hacia arriba en la cadena de abstracción."
 
 ---
 
-## Bloque 3: Hands-on 1 — Astro Portfolio (min 25-40, 15 min)
+## Acto II: El stack (min 20-25)
+
+### Multi-modelo
+
+Esta slide tiene cinco filas. **Comenta cada una en una línea**:
+
+- **Gemini**: planning. Contexto largo, buen output estructurado.
+- **Claude**: building. El código que va a producción.
+- **Workers AI**: edge fallback. Barato. Rápido. Bueno para iteración.
+- **Codex**: hunting. Pasada adversarial sobre los diffs.
+- **CodeRabbit + Copilot**: review automático. Dos opinions sobre cada merge.
+
+### El punto clave
+
+> "Cada uno se equivoca a veces. La única forma de descubrirlo es que otro disienta."
+
+Esa frase es el corazón. **Pausala.**
+
+### Los agentes de soporte
+
+Tres slides. Una por agente. **No los expliques en detalle** — los estudiantes no necesitan saber cómo funciona Engram internamente. Dilo así:
+
+> "Engram es memoria persistente — un RAG. Lo importante no es el RAG. Lo importante es que **nada vive solo en el historial de chat**."
+>
+> "Gentle es grounding — el agente que me aterriza. La semana pasada, 10 de la noche, un stakeholder me pidió reescribir un producto. Gentle dijo: *no, no esta noche.* Y tenía razón."
+>
+> "Warlock es seguridad — auditoría. Detectó dos CVEs reales en 48 horas. A esos vamos a llegar."
+
+---
+
+## Pipeline SDD (min 25-30)
+
+### El DAG
+
+Cuando muestres el diagrama, di esto:
+
+> "Spec y design alimentan tasks **en paralelo**. Verify es un gate, no una vibra. Archive sincroniza y cierra.
+>
+> Este es el mismo SDLC que ven en la universidad. **La diferencia es que ahora es ejecutable.** Cada flecha es un comando."
+
+### Por qué funciona a escala
+
+> "Ningún agente, y ningún humano, tiene que sostener el proyecto entero en la cabeza. El DAG lo sostiene.
+>
+> Es la diferencia entre 'estoy haciendo malabares con cinco bolas' y 'tengo un sistema que sabe dónde está cada bola'."
+
+---
+
+## Práctica I: Astro Portfolio (min 30-45)
 
 ### Antes de empezar
 
-**Pediles que ya hayan corrido `pnpm install` antes** (está en `setup.md`). Si no lo hicieron, los 5 min iniciales se vuelven 12.
+Que **ya** hayan corrido `pnpm install` antes (está en `setup.md`). Si no, los primeros 5 min se vuelven 12.
 
 ### Tu plan en vivo
 
-1. **Min 0-2**: Vos abrís el repo, corrés `pnpm dev`, mostrás el sitio.
-2. **Min 2-7**: Recorrido por la estructura. `src/pages/`, `src/components/`. Detenete en `index.astro` y mostrá que **no es JSX, es HTML real con frontmatter**.
-3. **Min 7-10**: El ejercicio del cambio de paleta. Que abran `global.css`, cambien los colores, vean el hot-reload.
-4. **Min 10-15**: Discusión Astro vs Next.
+1. **Min 0-2**: tú abres el repo, corres `pnpm dev`, muestras el sitio.
+2. **Min 2-7**: tour por la estructura. `src/pages/`, `src/components/`. Detente en `index.astro` y muestra que **no es JSX — es HTML real con frontmatter**.
+3. **Min 7-12**: ejercicio del cambio de paleta. Que abran `global.css`, cambien los colores, miren el hot-reload.
+4. **Min 12-15**: la slide de Astro vs Next.
 
-### Lo que NO hagas
+### Qué NO hacer
 
-- No expliques qué es Vite. Pierden 5 min y no es el punto.
-- No expliques las CSS variables si nadie pregunta. Asumí que las conocen.
-- No te metas en SSR/SSG/ISR. Es otro rabbit hole.
+- **No expliques qué es Vite.** Pierdes 5 min, no es el punto.
+- **No expliques CSS variables** si no preguntan. Asume que las saben.
+- **No te metas en SSR/SSG/ISR** — otro rabbit hole.
 
-### Punto pedagógico fuerte para upper-year
+### El concepto pedagógico
 
-> "Astro hace algo que React/Next no hacen por default: **te obliga a justificar el JavaScript que mandás al cliente**.
+> "Astro **invierte el default** de React. En React todo es JS hasta que pides estático. En Astro todo es estático hasta que pides hidratación.
 >
-> En React, todo es un componente, todo se hidrata, todo viaja al cliente. Es opt-out: hay que **pedir explícitamente** que algo sea estático (RSC).
->
-> En Astro es al revés: todo es estático, hay que **pedir explícitamente** que algo se hidrate (`client:load`, `client:idle`, `client:visible`).
->
-> Esa inversión de default es **diseño**. Cambia qué decisiones tomás sin pensar."
+> Esa inversión no es performance. **Es diseño.** Cambia qué decisiones tomas sin pensar. Y las decisiones que tomas sin pensar son las que definen tu arquitectura a largo plazo."
 
 ---
 
-## Bloque 4: Hands-on 2 — Biblioteca CRUD (min 40-65, 25 min)
+## Práctica II: Biblioteca (min 45-70)
 
-### Este es el bloque más largo. Cuidá el tiempo.
+### El bloque más largo. Cuida el tiempo.
 
 ### Tu plan en vivo
 
-1. **Min 0-3**: Setup. Que cada uno corra:
+1. **Min 0-3**: setup. Todos corren:
    ```bash
    pnpm db:migrate:local
    pnpm db:seed:local
    pnpm dev
    ```
-2. **Min 3-5**: Tour rápido por la UI. Registrar, login, crear libro.
-3. **Min 5-15**: Tour por el código. **No leas todo. Mostrá las piezas clave**:
+2. **Min 3-6**: tour por la UI. Registrar, login, crear libro.
+3. **Min 6-15**: tour por el código. **No leas todo. Muestra las piezas clave**:
    - `wrangler.toml` — el binding declarativo de D1 y DO
-   - `src/index.ts` — Hono routes, mostrá un endpoint público y uno con auth
+   - `src/index.ts` — Hono routes, muestra un endpoint público y uno con auth
    - `src/session-store.ts` — el Durable Object completo (es chico, léelo entero)
-   - `src/auth.ts` — explicá PBKDF2 brevemente
-4. **Min 15-25**: La discusión del DO. Slide "alternativas para sesiones". Aquí es donde brilla la charla.
+   - `src/auth.ts` — explica PBKDF2 en 30 segundos
+4. **Min 15-25**: la discusión del DO. Esto es lo más importante del workshop.
 
 ### Cuando lleguen al DO
 
-**Pausá largo aquí.** Es el concepto más nuevo. Probablemente nunca usaron algo así.
+**Pausa larga aquí.** Es el concepto más nuevo. Probablemente nunca usaron algo así.
 
 > "Pregunta para ustedes: en cualquier app que hayan construido — ¿dónde guardan las sesiones?
 >
-> [Esperá respuestas: 'en una tabla', 'en Redis', 'en JWT'.]
+> [Espera respuestas: 'en una tabla', 'en Redis', 'en JWT'.]
 >
 > OK. ¿Y por qué cada una de esas tiene **problemas**?"
 
-Guialos a:
-- Tabla SQL → latencia, carga en la DB
+Guíalos a:
+- SQL → latencia, carga en la DB
 - Redis → otro servicio que mantener, single point of failure
 - JWT → no se puede revocar sin blacklist
 
-> "El Durable Object es **una primitiva nueva**: te da estado consistente serverless. No tenés que mantener Redis. No tenés que hacer queries a Postgres. Y es transaccional por diseño.
+> "El Durable Object es **una primitiva nueva**: te da estado consistente serverless.
 >
-> Esto **no existía** hace 3 años. Es genuinamente nuevo."
+> Esto no existía hace 3 años. Es genuinamente nuevo. Y resuelve un problema que en otros stacks resuelves apilando Redis + Postgres + lógica custom."
 
-### Modelo de consistencia
+### La regla que generaliza
 
-Si hay tiempo, profundizá:
+Esta slide es clave para tu identidad como security engineer:
 
-> "Single-threaded por instancia significa que dentro de un DO, **no hay race conditions**. Si dos requests llegan a la misma sesión, se procesan en orden.
+> "Cada AI tool es un endpoint autenticado.
 >
-> Comparen con Postgres: `BEGIN; SELECT ... FOR UPDATE; UPDATE ...; COMMIT;` — toda esa danza es para emular lo que el DO te da gratis."
+> Si no expondrían la operación como un REST call sin guardias, no pueden exponerla como un tool sin guardias.
+>
+> El schema de Zod no es un boundary de seguridad. **El handler sí.**"
 
-### Si sobra tiempo (raro)
-
-Mostrá `/api/stats` y cómo el DO mantiene un conteo de sesiones activas que sobrevive a cold starts. Eso es **estado vivo distribuido**.
+Pausa larga. **Esto es lo que aprendiste en producción**, no en un libro. Diles que es lo que aprendiste con la CVE #2.
 
 ---
 
-## Bloque 5: Vibe coding en acción (min 65-80, 15 min)
+## Casos de estudio: las dos CVEs (min 70-78)
 
-### Este bloque es donde la charla cierra el círculo
+### Cómo contarlas
 
-Las dos primeras horas fueron "acá tienen herramientas y conceptos". Este bloque es "ahora veamos cómo se construye con IA **bien**".
+No las dramatices. Cuéntalas como las cuentas en el manifesto — directas, específicas, con la lección al final.
 
-### Mal prompt vs buen prompt
+### CVE #1
 
-Detenete en cada fila de la tabla. **No la leas — comentala**.
-
-> "Miren la última fila. 'Mostrame el plan antes de tocar código'. Esa frase cambia toda la dinámica.
+> "Había una función llamada `requireOrgAdmin()`. Cualquier miembro de una organización era tratado como admin automáticamente, sin importar su rol.
 >
-> Sin esa frase, el modelo te tira 200 líneas de código. Vos las copiás. Tal vez funcionan, tal vez no.
+> Parecía intencional. El patrón era viejo. Nadie lo cuestionaba.
 >
-> Con esa frase, el modelo te dice **qué va a hacer** primero. Vos lo revisás. Lo cuestionás. Y recién después le pedís el código.
+> El agente de seguridad corrió una auditoría sin que se lo pidiera. Encadenó con code-review. Confirmó: bug real de privilege escalation.
 >
-> Esa pausa es **donde vivís vos**. Es donde dirigís."
+> **Habría vivido en producción durante meses.**
+>
+> Lección: **lo que parece un feature, a veces es un CVE.** Código viejo no es código seguro. Código viejo es código sin auditar con un historial más largo."
 
-### Live exercise
+### CVE #2
 
-**Sé claro con las reglas**:
-
-1. Plan antes de código.
-2. Cuestionar al menos UNA decisión.
-3. Explicar al compañero.
-
-Caminá entre los bancos. Mirá pantallas. Cuando alguien tenga un prompt mediocre, sentate al lado y mejoralo con él.
-
-**Lo más importante**: cuando alguien acepte código sin leerlo, paralo:
-
-> "Pará. ¿Qué hace esa línea?"
-
-Si no puede responder, dejalo pensar 30 segundos. Después decile que vuelva al modelo y pida que se la explique. Que **lo investigue**.
+> "El asistente de IA tenía un tool llamado `get_ticket_detail`. Tomaba cualquier ticket por ID usando una cuenta de servicio. Sin chequeo de ownership.
+>
+> Un usuario en organización A podía pedir un ticket de organización B. Y el asistente lo entregaba.
+>
+> Caught durante la auditoría de seguridad del rework, **antes de producción**.
+>
+> Lección que generaliza: **cada AI tool es un endpoint autenticado.** Esa frase es la única que necesitan recordar del bloque de seguridad."
 
 ---
 
-## Bloque 6: Cuándo NO (min 80-90, 10 min)
+## Las cinco scars (min 78-82)
 
-### Esto es el cierre honesto
+### Por qué este bloque
 
-Es donde la mayoría de las charlas tipo "AI is the future!!!" fallan. Vos no falles.
+Muchas charlas de IA solo muestran wins. **Tú muestras scars.** Esa honestidad es tu credibilidad.
 
-> "Si la única lección que se llevan de hoy es que **la IA es genial, úsenla siempre** — fallé.
+Léelas rápido. Una por una. **Sin disculparte por ninguna.**
+
+### El cierre del bloque
+
+> "El workflow es bueno. No es magia. El feedback del usuario sigue siendo irreemplazable.
 >
-> Hay zonas donde vibe coding es la elección **incorrecta**. Y reconocerlas es lo que separa a alguien que sabe usar IA de alguien que se cree que sabe."
+> Si después de hoy creen que el SDD los va a salvar de todo, fallé. **Los va a salvar del 80%.** El 20% lo sigues haciendo tú."
 
-Recorré las cinco zonas. Detenete especialmente en la #4:
+---
 
-> "**Código que vos no podrías escribir.** Esta es la regla de oro. Si te entregaron un sistema y no entendés cómo funciona, no estás programando — estás **manteniendo un misterio**. Y los misterios se vuelven crisis."
+## Las 5 reglas (min 82-87)
 
-### La pregunta de los $10,000
+### Cómo presentar
 
-Léela despacio.
+Cinco slides. Una regla cada una. **Pausa larga después de leer cada regla.**
 
-> "Si esto se rompe a las 3am, ¿podés debuggearlo?
+Las reglas son tu firma — tu manifiesto. Léelas con peso.
+
+> **Regla 01 — Specs antes del código. Siempre.**
 >
-> Si la respuesta es no — no es tu código. Es código que vive en tu repo. Hay una diferencia.
+> Si no puedes escribir el spec, no entiendes el cambio. Deja de tipear prompts.
+
+> **Regla 02 — Un solo modelo nunca es la respuesta.**
 >
-> En tu primer trabajo, vas a estar de guardia. Te van a llamar a las 3am. El sistema va a estar tirado. Y la única persona que puede arreglarlo sos vos.
+> Cada modelo tiene una fortaleza. La mezcla es el moat.
+
+> **Regla 03 — Design is code. Merge it.**
 >
-> En ese momento, no podés pedirle a Claude que te explique el código que vos mismo escribiste hace 3 meses. **Ese conocimiento lo tenés vos, o no existe.**"
+> Las decisiones de arquitectura viven en version control. No en Notion.
+
+> **Regla 04 — "Compila" ≠ "funciona".**
+>
+> Verify es una fase, no una vibra.
+
+> **Regla 05 — La IA es tu junior, no tu genius.**
+>
+> No mergees el PR de un junior sin leerlo.
+
+---
+
+## El número + cierre (min 87-90)
+
+### El número
+
+> "De baseline a vivecoding: **6 meses a 1 mes**.
+>
+> Producción. Multi-tenant. 78 tests pasando. Dos auditorías de seguridad.
+>
+> La velocidad **no vino de saltarse pasos**. Vino de paralelizar los pasos correctos con los modelos correctos."
 
 ### Cierre
 
-Slide final, 5 puntos clave. Léelos despacio. Después:
+> "Tres cosas para llevarse a casa.
+>
+> Uno: **disciplina le gana a vibras.**
+>
+> Dos: **el modelo correcto para el trabajo correcto.**
+>
+> Tres: **la IA es un amplificador.** No reemplaza al ingeniero. Hace al entrenado seis veces más rápido."
 
-> "Los repos están públicos. Los van a usar para el TP. Si alguien arma algo genial encima, me lo mostrás.
+Pausa. Última slide:
+
+> "Vibecoding es roleplay. **Vivecoding es una campaña con disciplina.**
+>
+> Los repos están públicos. El manifiesto completo está en vivecoding.dev.
 >
 > Preguntas?"
 
 ---
 
-## Q&A — preguntas probables y cómo responder
+## Q&A — preguntas probables
 
-**P: ¿Cuál es mejor, Claude o ChatGPT?**
+**P: ¿Cuál modelo es mejor, Claude o ChatGPT?**
 
-> Depende del trabajo. Claude es mejor en código largo y refactors. ChatGPT/GPT es mejor en exploración rápida. Yo uso los dos.
+> Depende del trabajo. Claude es mejor en código largo y refactors. GPT es mejor en exploración rápida y creatividad. Yo uso los dos. La pregunta correcta no es cuál es mejor — es *para qué*.
 
-**P: ¿No vamos a quedar sin trabajo?**
+**P: ¿No nos van a reemplazar?**
 
-> Los que no usen IA, sí. Los que la usen como multiplicador, no. El trabajo va a moverse de 'escribir código' a 'diseñar sistemas' y 'verificar IA'. Más interesante, no menos.
+> A los que no usen IA, sí. A los que la usen bien, no. El trabajo va a moverse de 'escribir código' a 'diseñar sistemas y verificar IA'. Más interesante, no menos.
 
-**P: ¿Vale la pena aprender React si la IA lo hace por mí?**
+**P: ¿Vale la pena aprender React si la IA lo escribe por mí?**
 
-> Sí. Sin entender React no vas a poder **dirigir** al modelo cuando escriba React. Vas a publicar código sin saber qué publica.
+> Sí. Sin entender React no vas a poder **dirigir** al modelo cuando escriba React. Vas a estar publicando código sin saber qué publicas. Y cuando se rompa, no vas a poder arreglarlo.
 
 **P: ¿Cuánto cuesta esto en producción?**
 
-> El stack que mostré (Cloudflare free tier) aguanta una app real con hasta ~100k requests/día sin costo. Si tu app crece más, hablamos de $5-20/mes. Mucho más barato que un VPS.
+> El stack que mostré (Cloudflare free tier) aguanta hasta 100k requests/día sin costo. Si tu app crece, hablamos de 5-20 USD/mes. Más barato que un VPS.
 
 **P: ¿Cómo aprendo los fundamentos si la IA me da las respuestas?**
 
-> Forzate a no usarla cuando estés aprendiendo algo nuevo. Usala cuando ya sabés lo que querés. Es disciplina, no técnica.
+> Disciplina, no técnica. Cuando estés aprendiendo algo nuevo, no la uses. Cuando ya sepas lo que quieres, úsala. La diferencia es: ¿estoy aprendiendo, o estoy ejecutando?
+
+**P: ¿Por qué Cloudflare y no AWS?**
+
+> Por el plan gratuito y por el modelo de edge. AWS gratuito te dura un año y después te empieza a cobrar. Cloudflare gratuito **es permanente** dentro de los límites. Para aprender y para apps pequeñas-medianas, no hay competencia.
+
+**P: ¿Qué pasa si un día Cloudflare cierra?**
+
+> Misma respuesta que para cualquier vendor: portabilidad. Hono corre en Workers, Bun, Node, Deno. Astro genera HTML estático que sirve cualquier servidor. D1 es SQLite — los datos salen como `.sqlite`. La arquitectura que mostré es portable.
