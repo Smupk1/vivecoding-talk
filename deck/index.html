@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Vivecoding — Samuel Cala</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Fraktur&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0a14;
+    --bg-2:#13112a;
+    --ink:#f4f0e6;          /* parchment */
+    --muted:#9a93b8;
+    --gold:#f6c453;          /* d20 gold */
+    --crit:#ff5470;          /* nat 20 / nat 1 red-pink */
+    --mana:#7c5cff;          /* purple mana */
+    --potion:#3ddc97;        /* healing green */
+    --steel:#8fb3ff;         /* steel blue */
+    --parchment:#efe3c2;
+    --rune:#ffb4d8;
+    --line:rgba(244,240,230,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#000;color:var(--ink);font-family:"Space Grotesk",sans-serif;-webkit-font-smoothing:antialiased}
+  deck-stage > section{
+    position:relative;width:1920px;height:1080px;overflow:hidden;
+    background:radial-gradient(1200px 800px at 20% 10%, #1c1638 0%, transparent 60%),
+               radial-gradient(900px 700px at 90% 90%, #221a3e 0%, transparent 55%),
+               linear-gradient(180deg, #0b0a14 0%, #0a0814 100%);
+    color:var(--ink);
+    padding:90px 110px;
+    display:flex;flex-direction:column;
+  }
+
+  /* ==== ENTRANCE ANIMATIONS ==== */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:none } }
+  @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+  @keyframes scaleIn { from { opacity:0; transform:scale(.86) } to { opacity:1; transform:none } }
+  @keyframes slideRight { from { opacity:0; transform:translateX(-60px) } to { opacity:1; transform:none } }
+  @keyframes glowPulse { 0%,100% { box-shadow:0 0 0 rgba(246,196,83,0); text-shadow:0 0 30px rgba(246,196,83,.0) } 50% { text-shadow:0 0 40px rgba(246,196,83,.55) } }
+  @keyframes spinSlow { to { transform:rotate(360deg) } }
+  @keyframes diceRoll { 0% { transform:rotate(0) scale(.6); opacity:0 } 60% { transform:rotate(380deg) scale(1.08); opacity:1 } 100% { transform:rotate(360deg) scale(1); opacity:1 } }
+  @keyframes strikeIn { from { transform:scaleX(0); transform-origin:left } to { transform:scaleX(1); transform-origin:left } }
+  @keyframes barFill { from { transform:scaleX(0); transform-origin:left } to { transform:scaleX(1); transform-origin:left } }
+
+  /* slides only animate when active (deck-stage sets data-active or aria-hidden=false on current section). We trigger via :target-like — but deck_stage swaps display, so animations re-run on each show. */
+  deck-stage > section > *{ will-change:opacity, transform }
+
+  .anim-fadeup    { animation: fadeUp .7s cubic-bezier(.22,.9,.3,1) both }
+  .anim-fadein    { animation: fadeIn .9s ease both }
+  .anim-scalein   { animation: scaleIn .7s cubic-bezier(.22,.9,.3,1) both }
+  .anim-slideR    { animation: slideRight .7s cubic-bezier(.22,.9,.3,1) both }
+  .anim-dice      { animation: diceRoll 1.1s cubic-bezier(.22,.9,.3,1) both }
+  .anim-strike    { animation: strikeIn .5s cubic-bezier(.7,0,.3,1) both }
+  .anim-glow      { animation: glowPulse 3.4s ease-in-out infinite }
+
+  .d-1 { animation-delay:.10s } .d-2 { animation-delay:.22s } .d-3 { animation-delay:.34s }
+  .d-4 { animation-delay:.46s } .d-5 { animation-delay:.58s } .d-6 { animation-delay:.70s }
+  .d-7 { animation-delay:.82s } .d-8 { animation-delay:.94s } .d-9 { animation-delay:1.06s }
+
+  /* slide cross-fade transition (deck-stage handles section show; we add a fade-in on root) */
+  deck-stage > section { animation: fadeIn .4s ease both }
+  /* shared chrome */
+  .chrome-top, .chrome-bot{
+    position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+    padding:32px 56px;font-family:"JetBrains Mono",monospace;font-size:18px;color:var(--muted);
+    letter-spacing:.12em;text-transform:uppercase;
+  }
+  .chrome-top{top:0}
+  .chrome-bot{bottom:0}
+  .chrome-top .dot, .chrome-bot .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:10px;vertical-align:middle;box-shadow:0 0 12px var(--gold)}
+  .chip{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid var(--line);border-radius:999px;
+    padding:8px 16px;font-family:"JetBrains Mono",monospace;font-size:16px;color:var(--ink);
+    background:rgba(255,255,255,.03);
+  }
+  .chip.gold{border-color:rgba(246,196,83,.45);color:var(--gold)}
+  .chip.crit{border-color:rgba(255,84,112,.45);color:var(--crit)}
+  .chip.potion{border-color:rgba(61,220,151,.45);color:var(--potion)}
+  .chip.mana{border-color:rgba(124,92,255,.5);color:var(--mana)}
+  .chip.steel{border-color:rgba(143,179,255,.5);color:var(--steel)}
+
+  h1,h2,h3{font-family:"Space Grotesk",sans-serif;letter-spacing:-0.02em;margin:0;font-weight:700;text-wrap:balance}
+  .display{font-size:220px;line-height:.92;font-weight:700;letter-spacing:-0.04em}
+  .h1{font-size:128px;line-height:.95;letter-spacing:-0.035em}
+  .h2{font-size:88px;line-height:1;letter-spacing:-0.025em}
+  .h3{font-size:56px;line-height:1.05}
+  .body{font-size:30px;line-height:1.45;color:var(--ink);text-wrap:pretty;max-width:30ch}
+  .body-lg{font-size:36px;line-height:1.4;color:var(--ink);text-wrap:pretty}
+  .meta{font-family:"JetBrains Mono",monospace;font-size:18px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .gold{color:var(--gold)}
+  .crit{color:var(--crit)}
+  .mana{color:var(--mana)}
+  .potion{color:var(--potion)}
+  .steel{color:var(--steel)}
+  .muted{color:var(--muted)}
+
+  /* d20 svg helper layout */
+  .stack{display:flex;flex-direction:column;gap:28px}
+  .row{display:flex;gap:28px;align-items:center}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:24px}
+  .spacer{flex:1}
+
+  .card{
+    border:1px solid var(--line);border-radius:24px;padding:36px;
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
+    position:relative;overflow:hidden;
+  }
+  .card .corner{position:absolute;top:14px;right:18px;font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--muted);letter-spacing:.2em}
+
+  /* parchment card */
+  .parchment{
+    background:linear-gradient(180deg,#efe3c2,#e3d3a4);
+    color:#2a1d0d;
+    border-radius:18px;padding:48px;
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,.06), 0 30px 60px rgba(0,0,0,.45);
+    position:relative;
+  }
+  .parchment::before, .parchment::after{
+    content:"";position:absolute;left:0;right:0;height:18px;
+    background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.08) 22px 24px);
+  }
+  .parchment::before{top:0}
+  .parchment::after{bottom:0}
+
+  /* dice icon */
+  .d20{width:1em;height:1em;display:inline-block;vertical-align:-0.12em}
+
+  /* rune divider */
+  .rune-divider{display:flex;align-items:center;gap:18px;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:16px;letter-spacing:.3em;text-transform:uppercase}
+  .rune-divider::before,.rune-divider::after{content:"";height:1px;background:var(--line);flex:1}
+
+  /* Title slide */
+  .title-bg{
+    position:absolute;inset:0;overflow:hidden;
+  }
+  .title-bg .bigword{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-size:520px;font-weight:700;letter-spacing:-0.06em;
+    color:transparent;-webkit-text-stroke:2px rgba(246,196,83,.18);
+    white-space:nowrap;pointer-events:none;
+  }
+
+  /* Confession slide strikethrough */
+  .strike{position:relative;display:inline-block}
+  .strike::after{
+    content:"";position:absolute;left:-6px;right:-6px;top:55%;height:14px;
+    background:var(--crit);transform:rotate(-3deg);border-radius:4px;
+    box-shadow:0 0 30px rgba(255,84,112,.6);
+  }
+
+  /* vibes vs vives */
+  .vs-col{padding:48px;border-radius:24px;height:100%;display:flex;flex-direction:column;gap:28px}
+  .vs-vibe{background:linear-gradient(180deg,rgba(255,84,112,.10),rgba(255,84,112,.02));border:1px solid rgba(255,84,112,.35)}
+  .vs-vive{background:linear-gradient(180deg,rgba(61,220,151,.10),rgba(61,220,151,.02));border:1px solid rgba(61,220,151,.4)}
+  .vs-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:18px;font-size:28px;line-height:1.35}
+  .vs-col li{display:flex;gap:14px;align-items:flex-start}
+  .vs-col li .b{flex-shrink:0;width:14px;height:14px;border-radius:50%;margin-top:14px}
+  .vs-vibe li .b{background:var(--crit)}
+  .vs-vive li .b{background:var(--potion)}
+
+  /* party card */
+  .party-card{
+    border:1px solid var(--line);border-radius:24px;padding:28px;
+    background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+    display:flex;flex-direction:column;gap:14px;
+    position:relative;overflow:hidden;
+  }
+  .party-card .portrait{
+    width:100%;aspect-ratio:1.4/1;border-radius:14px;
+    background:radial-gradient(circle at 50% 35%, var(--p1,#7c5cff), var(--p2,#1a1233));
+    display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .party-card .portrait svg{width:55%;height:80%}
+  .party-card .name{font-size:38px;font-weight:700;letter-spacing:-0.02em;line-height:1}
+  .party-card .class{font-family:"JetBrains Mono",monospace;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .party-card .role{font-size:21px;line-height:1.3;color:var(--ink)}
+  .party-card .stat{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+
+  /* stack table */
+  .stack-row{display:grid;grid-template-columns:80px 280px 1fr 280px;gap:32px;align-items:center;padding:26px 0;border-bottom:1px solid var(--line)}
+  .stack-row:last-child{border-bottom:none}
+  .stack-row .num{font-family:"JetBrains Mono",monospace;font-size:36px;color:var(--gold);font-weight:700}
+  .stack-row .who{font-size:42px;font-weight:700;letter-spacing:-0.02em}
+  .stack-row .job{font-size:26px;line-height:1.3;color:var(--ink)}
+  .stack-row .tag{font-family:"JetBrains Mono",monospace;font-size:18px;color:var(--muted);text-align:right;letter-spacing:.1em;text-transform:uppercase}
+
+  /* DAG */
+  .dag-node{
+    border:1.5px solid var(--line);border-radius:18px;padding:22px 24px;
+    background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+    min-width:230px;
+  }
+  .dag-node .label{font-family:"JetBrains Mono",monospace;font-size:18px;color:var(--gold);letter-spacing:.05em}
+  .dag-node .desc{font-size:18px;color:var(--muted);margin-top:6px;line-height:1.3}
+  .dag-arrow{color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:24px}
+
+  /* meta-commands */
+  .cmd{
+    border:1px solid var(--line);border-radius:18px;padding:36px 40px;
+    background:linear-gradient(180deg,#15102e,#0d0a1f);
+    font-family:"JetBrains Mono",monospace;
+  }
+  .cmd .ln{font-size:38px;color:var(--ink);letter-spacing:-0.01em}
+  .cmd .ln .gold{color:var(--gold)}
+  .cmd .desc{font-size:24px;color:var(--muted);margin-top:14px;font-family:"Space Grotesk",sans-serif;letter-spacing:0}
+
+  /* Big number */
+  .big-number{font-size:520px;line-height:.85;font-weight:700;letter-spacing:-0.06em}
+
+  /* code-ish callout */
+  .obs{font-family:"JetBrains Mono",monospace;font-size:18px;color:var(--gold);letter-spacing:.05em}
+  .quote{font-size:48px;line-height:1.15;font-weight:600;letter-spacing:-0.02em;text-wrap:balance}
+
+  /* hot take row */
+  .take{display:flex;gap:28px;align-items:flex-start;padding:32px 0;border-bottom:1px dashed var(--line)}
+  .take:last-child{border-bottom:none}
+  .take .n{font-family:"JetBrains Mono",monospace;font-size:42px;color:var(--gold);font-weight:700;line-height:1;min-width:80px}
+  .take .t{font-size:38px;font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+  .take .s{font-size:22px;color:var(--muted);margin-top:10px;line-height:1.35}
+
+  /* speckles bg */
+  .speckle{position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:radial-gradient(rgba(246,196,83,.18) 1px, transparent 1.5px);background-size:42px 42px}
+
+  /* warning ribbon */
+  .ribbon{
+    display:inline-block;background:var(--crit);color:#fff;padding:10px 18px;border-radius:6px;
+    font-family:"JetBrains Mono",monospace;font-size:18px;letter-spacing:.2em;text-transform:uppercase;
+  }
+  .ribbon.gold{background:var(--gold);color:#1a1404}
+  .ribbon.potion{background:var(--potion);color:#0a2f1f}
+  .ribbon.mana{background:var(--mana);color:#fff}
+  .ribbon.steel{background:var(--steel);color:#0a1a3a}
+
+  /* end slide */
+  .qr-box{
+    width:280px;height:280px;border:2px dashed var(--line);border-radius:16px;
+    display:grid;place-items:center;color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:16px
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes vc-fadeUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:none } }
+  @keyframes vc-fadeIn { from { opacity:0 } to { opacity:1 } }
+  @keyframes vc-scaleIn { from { opacity:0; transform:scale(.86) } to { opacity:1; transform:scale(1) } }
+  @keyframes vc-slideRight { from { opacity:0; transform:translateX(-60px) } to { opacity:1; transform:none } }
+  @keyframes vc-slideLeft { from { opacity:0; transform:translateX(60px) } to { opacity:1; transform:none } }
+  @keyframes vc-strike { from { transform:scaleX(0);transform-origin:left } to { transform:scaleX(1);transform-origin:left } }
+  @keyframes vc-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(246,196,83,.5)} 50%{ box-shadow:0 0 0 24px rgba(246,196,83,0)} }
+  @keyframes vc-spin { from { transform:rotate(0)} to { transform:rotate(360deg)} }
+  @keyframes vc-floatPop { 0%{ opacity:0;transform:scale(.7) translateY(20px)} 60%{ transform:scale(1.05) translateY(-4px)} 100%{ opacity:1;transform:scale(1) translateY(0)} }
+  @keyframes vc-shimmer { 0%{ background-position:-200% 0} 100%{ background-position:200% 0} }
+
+  /* base: only animate when slide is the active one */
+  deck-stage > section[data-deck-active] .anim-up,
+  deck-stage > section[data-deck-active] .anim-fade,
+  deck-stage > section[data-deck-active] .anim-scale,
+  deck-stage > section[data-deck-active] .anim-right,
+  deck-stage > section[data-deck-active] .anim-left,
+  deck-stage > section[data-deck-active] .anim-pop { opacity:0; animation-fill-mode:forwards }
+
+  deck-stage > section[data-deck-active] .anim-up    { animation: vc-fadeUp .7s cubic-bezier(.2,.7,.2,1) both }
+  deck-stage > section[data-deck-active] .anim-fade  { animation: vc-fadeIn .8s ease both }
+  deck-stage > section[data-deck-active] .anim-scale { animation: vc-scaleIn .7s cubic-bezier(.2,.7,.2,1) both }
+  deck-stage > section[data-deck-active] .anim-right { animation: vc-slideRight .7s cubic-bezier(.2,.7,.2,1) both }
+  deck-stage > section[data-deck-active] .anim-left  { animation: vc-slideLeft .7s cubic-bezier(.2,.7,.2,1) both }
+  deck-stage > section[data-deck-active] .anim-pop   { animation: vc-floatPop .8s cubic-bezier(.2,.7,.2,1) both }
+
+  /* delay utility */
+  .d1{animation-delay:.10s !important}
+  .d2{animation-delay:.20s !important}
+  .d3{animation-delay:.32s !important}
+  .d4{animation-delay:.44s !important}
+  .d5{animation-delay:.56s !important}
+  .d6{animation-delay:.68s !important}
+  .d7{animation-delay:.80s !important}
+  .d8{animation-delay:.92s !important}
+
+  /* slide cross-fade transition (deck-stage swaps slides — we fade the active one in) */
+  deck-stage > section { transition: opacity .35s ease; }
+
+  /* title big-word slow drift */
+  deck-stage > section[data-deck-active] .bigword{
+    animation: vc-fadeIn 1.2s ease both, vc-driftX 18s ease-in-out infinite alternate 1.2s;
+  }
+  @keyframes vc-driftX { from { transform:translate(-50%,-50%) translateX(-30px) } to { transform:translate(-50%,-50%) translateX(30px) } }
+
+  /* d20 slow spin on title */
+  deck-stage > section[data-deck-active] .d20-spin { animation: vc-fadeIn .8s ease both, vc-spin 40s linear infinite 1s; transform-origin:center }
+
+  /* strike-through animated */
+  deck-stage > section[data-deck-active] .strike::after { animation: vc-strike .6s cubic-bezier(.2,.7,.2,1) .9s both }
+  .strike::after { transform:scaleX(0);transform-origin:left }
+
+  /* big-number counter pulse */
+  deck-stage > section[data-deck-active] .pulse-glow { animation: vc-floatPop 1s cubic-bezier(.2,.7,.2,1) both, vc-pulse 2.4s ease-in-out 1.2s infinite }
+
+  /* shimmer for ribbons */
+  .shimmer{
+    background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%), var(--ribbon-bg, var(--crit));
+    background-size: 200% 100%, 100% 100%;
+    background-repeat: no-repeat, no-repeat;
+  }
+  deck-stage > section[data-deck-active] .shimmer { animation: vc-shimmer 3s linear infinite }
+
+  /* DAG arrow draw */
+  @keyframes vc-drawX { from { transform:scaleX(0);opacity:0 } to { transform:scaleX(1);opacity:1 } }
+  deck-stage > section[data-deck-active] .arrow-draw{ display:inline-block;transform-origin:left center;animation: vc-drawX .35s ease forwards }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="speaker-notes">
+[
+  "Buenas. Soy Samuel Cala, Security Engineer en IT Audit Labs. Hoy es un workshop de noventa minutos sobre vivecoding — la metodología de ingeniería asistida por IA que practico todos los días. Dos repos reales como práctica hands-on. Una tesis: vibecoding es improvisación, vivecoding es ingeniería. Vamos.",
+  "Confesión rápida. Durante años pronuncié mal la palabra. Vibecoding. Yo decía vivecoding. Me lo corrigieron en un tablero, me dio vergüenza. Pero después miré lo que realmente hago — y resulta que tenía razón sin saberlo. Lo que yo hago no es vibecoding. Es algo distinto. Es lo que pasa cuando un ingeniero deja de improvisar y empieza a entregar.",
+  "Esta es la tesis. A la izquierda, vibecoding: prompt al modelo, ship lo que caiga, sin specs, sin design, sin tests, sin code review. A la derecha, vivecoding: disciplina de ingeniería de software de verdad. Specs primero. Design documents. TDD. Multi-LLM cross-check. Code review automatizado. La IA es un amplificador, no un reemplazo del oficio. Misma herramienta, mismos modelos. Disciplina distinta.",
+  "Yo no codeo solo. Orquesto. Tres agentes principales hacen trabajo especializado. RAG memory persiste cada decisión, observación y CVE — el contexto nunca se reinicia. Bard es el agente conversacional, el que me aterriza cuando estoy espiralizando. Y el Auditor audita seguridad — cazó dos CVEs reales en cuarenta y ocho horas. Cada agente, una función. Yo orquesto.",
+  "Después están los agentes SDD. Cada comando es una fase del Software Development Lifecycle clásico. sdd-explore reconoce el codebase. sdd-spec escribe requirements. sdd-design toma decisiones arquitecturales. sdd-apply implementa. sdd-verify valida. Cinco comandos, cinco fases, cero overlap. El mismo workflow que aprendieron en la universidad. Ahora ejecutable.",
+  "El stack. Regla número uno: el modelo correcto para el trabajo correcto. Gemini para documentación y planning, contexto largo y estructura. Claude para desarrollo, implementación, refactor, código real que va a producción. Cloudflare Workers AI para edge inference barata y rápida, fallback path cuando no quieres depender de una API. Codex para bug bounty y error hunting. Y en los PRs dos safety nets: CodeRabbit y Copilot. Doble revisión automatizada antes de mergear. Cinco modelos, cinco trabajos, cero overlap.",
+  "El corazón del workflow: el SDD pipeline. Es un DAG de comandos que ejecutan las fases del SDLC clásico. Init, explore, propose, spec, design, tasks, apply, verify, archive. Spec y design corren en paralelo y alimentan tasks. Apply genera código. Verify es un gate, no una vibra. Archive cierra. No se puede saltar fases. Esa es la disciplina.",
+  "Arriba del DAG hay tres meta-comandos del orchestrator. sdd-new arranca un cambio nuevo. sdd-continue corre la próxima fase que esté lista. sdd-ff es fast-forward de planning: propuesta a specs a design a tasks de un saque. Estos tres convierten el workflow de pesado a fluido. La metodología se vuelve herramienta cuando la fricción llega a cero.",
+  "Hands-on uno: portfolio en Astro. Clonen el repo, corran pnpm dev, abran localhost:4321. El concepto clave: Astro invierte el default de React. En React todo es JavaScript hasta que pides estático. En Astro todo es HTML hasta que pides hidratación. No es performance. Es diseño — cambia qué decisiones tomas sin pensar. Ejercicio en vivo: cambien la paleta de colores en global.css a los colores de su universidad y observen el hot-reload.",
+  "Hands-on dos: biblioteca CRUD con Cloudflare Workers, D1 y Durable Objects. Tres primitivas del free tier en un solo proyecto. Workers para compute, D1 para SQL, DO para estado consistente. Plan gratuito real: cien mil requests por día en Workers, cinco GB en D1, un millón de requests por mes en Durable Objects. Una clase entera puede martillar este stack sin que cueste un peso.",
+  "Dos ideas que generalizan. Una: ¿por qué un Durable Object para sesiones? Porque un Map en memoria no persiste entre nodos, un JWT no se puede invalidar, una tabla SQL te cuesta una query por request. Un DO te da una instancia global, in-memory, persistente, sin race conditions. Dos: cada AI tool es un endpoint autenticado. Si no expondrían la operación como REST sin guardias, no pueden exponerla como tool sin guardias. El schema Zod no es un boundary de seguridad. El handler sí.",
+  "Caso real: ITALPortal. Portal operativo del CISO. Risk register, M365 security assessment, project management, ticketing con Zendesk, asistente AI llamado Emma. Multi-tenant. Astro 5 con React 19 sobre Cloudflare Workers. Tres bases D1, R2, KV. Tres Durable Objects. Producción, multi-cliente, datos sensibles. No un toy project.",
+  "El número que vende el workshop entero. Seis meses fue el baseline tradicional. Un mes fue lo que tardé con vivecoding. Seis veces más rápido. Producción, multi-tenant, setenta y ocho tests pasando, dos auditorías de seguridad. La velocidad no vino de saltarme pasos. Vino de paralelizar los pasos correctos con los modelos correctos.",
+  "CVE uno. La función requireOrgAdmin tenía un bypass: cualquier miembro de una org era tratado como admin automáticamente. Parecía intencional. El patrón era viejo. Nadie lo cuestionaba. Habría vivido en producción durante meses. El agente de seguridad corrió un audit sin que se lo pidieran, lo encadenó con code-review, y confirmó: bug real, no design choice. Lección: lo que parece feature, a veces es CVE.",
+  "CVE dos. Emma tenía un tool llamado get_ticket_detail que fetcheaba cualquier ticket por ID vía service account. Sin chequeo de ownership. Cross-tenant data leak. Un usuario de la org A podía pedirle a Emma un ticket de la org B. Cazado durante la auditoría de seguridad del rework, antes de producción. La lección generaliza: cada AI tool es un endpoint autenticado.",
+  "Las cicatrices. Cinco cosas que no salieron bien. Workers AI con Llama y Kimi era demasiado lento. ts-node se rompió con ESM extensionless imports. Catorce componentes renderizando HTML entities crudos de MS Graph. client:load hydration mismatch con sessionStorage. Y la lección: Zendesk POST sin retry, SDD no lo cazó, el usuario sí. El workflow es bueno. No es magia. El feedback del usuario sigue siendo irreemplazable.",
+  "Las cinco reglas. Una: specs antes del código, siempre. Si no puedes escribir el spec, no entiendes el cambio. Dos: un solo modelo nunca es la respuesta. La mezcla es el moat. Tres: design is code, mergealo en el repo. Cuatro: compila no es funciona — verify es una fase. Cinco: la IA es tu junior, no tu genius. No mergees código que un junior no leíste, no mergees el de la IA tampoco.",
+  "Tres sentencias para llevarse a casa. Una: disciplina le gana a vibras. Dos: el modelo correcto para el trabajo correcto. Tres: la IA es un amplificador — al ingeniero entrenado lo hace seis veces más rápido. Vibecoding es improvisación. Vivecoding es ingeniería.",
+  "Ahí quedamos. Soy Samuel Cala, Security Engineer en IT Audit Labs. Los dos repos del workshop están públicos. El manifiesto completo está en vivecoding.dev. Preguntas. Disagree publicly. Los escucho."
+]
+</script>
+
+<deck-stage>
+
+<!-- 01 TITLE -->
+<section data-screen-label="01 Title">
+  <div class="title-bg" aria-hidden="true">
+    <div class="speckle"></div>
+    <div class="bigword">VIVECODING</div>
+  </div>
+  <div class="chrome-top"><span><span class="dot"></span>University Workshop · 90 min</span><span>vivecoding.dev</span></div>
+
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;flex:1">
+    <div class="anim-up d1" style="display:flex;align-items:center;gap:18px;margin-top:30px">
+      <span class="chip gold">Multi-LLM Stack</span>
+      <span class="chip">SDD Pipeline</span>
+      <span class="chip mana">Cloudflare Edge</span>
+    </div>
+
+    <div>
+      <div class="meta anim-fade d2" style="margin-bottom:32px">A software engineer's AI workflow</div>
+      <h1 class="display anim-up d3"><span class="gold">Vive</span>coding<span class="crit">.</span></h1>
+      <div class="body-lg anim-up d4" style="max-width:34ch;margin-top:36px;color:var(--muted)">
+        Cómo entregué <span class="gold">en 1 mes</span> lo que solía tomar <span class="crit">6</span> — sin saltarme la disciplina de ingeniería.
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div class="h3 anim-up d5" style="font-weight:600">Samuel Cala</div>
+        <div class="meta anim-up d6" style="margin-top:10px">Security Engineer · IT Audit Labs</div>
+      </div>
+      <div style="text-align:right" class="anim-fade d4">
+        <div class="meta gold" style="font-size:14px">Workshop</div>
+        <div class="h3" style="font-size:42px;font-weight:600;margin-top:8px">90 min · hands-on</div>
+        <div class="meta" style="margin-top:10px;font-size:13px">two repos · five primitives</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>01 / 19</span></div>
+</section>
+
+<!-- 02 CONFESSION -->
+<section data-screen-label="02 Confession">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 02 · The Confession</span><span>a small admission</span></div>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;flex:1;gap:48px">
+    <div class="meta anim-fade">A small embarrassing admission</div>
+    <h2 class="h1 anim-up d1" style="max-width:24ch">
+      For years I pronounced it <span class="strike">vibecoding</span>
+    </h2>
+    <h2 class="h1 gold anim-up d3" style="max-width:20ch">
+      I kept saying <span style="text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:18px;text-decoration-thickness:8px">vivecoding</span>.
+    </h2>
+    <div class="body-lg anim-up d5" style="max-width:36ch;color:var(--muted);margin-top:24px">
+      Turns out — once I looked at what I actually do —<br>
+      <span class="gold" style="font-weight:600">I was right by accident.</span>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>02 / 19</span></div>
+</section>
+
+<!-- 03 THESIS: VIBE vs VIVE -->
+<section data-screen-label="03 Vibe vs Vive">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 03 · The Thesis</span><span>discipline vs vibes</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:24px">The difference is the discipline</div>
+  <h2 class="h2 anim-up d1" style="margin-bottom:48px"><span class="crit">Vibecoding</span> &nbsp;vs&nbsp; <span class="potion">Vivecoding</span></h2>
+
+  <div class="grid-2" style="flex:1">
+    <div class="vs-col vs-vibe anim-right d2">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="h3 crit">Vibecoding</div>
+        <span class="ribbon">UNDISCIPLINED</span>
+      </div>
+      <div class="meta">Prompt and pray</div>
+      <ul>
+        <li><span class="b"></span><span>Prompt the model. Ship whatever falls out.</span></li>
+        <li><span class="b"></span><span>No specs. No design. Tests are optional.</span></li>
+        <li><span class="b"></span><span>One model. For everything.</span></li>
+        <li><span class="b"></span><span>"It compiles" = "it works".</span></li>
+        <li><span class="b"></span><span>Tech debt grows faster than you can write it.</span></li>
+      </ul>
+    </div>
+
+    <div class="vs-col vs-vive anim-left d3">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="h3 potion">Vivecoding</div>
+        <span class="ribbon potion">DISCIPLINED</span>
+      </div>
+      <div class="meta">Engineering discipline + AI as amplifier</div>
+      <ul>
+        <li><span class="b"></span><span>SDD pipeline: explore → spec → design → apply → verify.</span></li>
+        <li><span class="b"></span><span>Multi-model cross-check. Right model, right job.</span></li>
+        <li><span class="b"></span><span>TDD strict. Pure modules. Authz invariants.</span></li>
+        <li><span class="b"></span><span>Code review baked into every PR.</span></li>
+        <li><span class="b"></span><span>The AI amplifies the engineer — not the other way around.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>03 / 19</span></div>
+</section>
+
+<!-- 04 THE SPECIALIZED AGENTS -->
+<section data-screen-label="04 Agents">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 04 · Specialized Agents</span><span>three roles · one orchestrator</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Each agent, one job</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px">I don't code alone.<br><span class="gold">I orchestrate.</span></h2>
+
+  <div class="grid-3" style="flex:1">
+    <!-- RAG memory -->
+    <div class="party-card anim-pop d2" style="--p1:#f6c453;--p2:#3a2a08">
+      <div class="portrait">
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="38" stroke="#f6c453" stroke-width="2.5" fill="rgba(246,196,83,0.08)"/>
+          <path d="M30 50 Q50 25 70 50 Q50 75 30 50 Z" stroke="#f6c453" stroke-width="2" fill="none"/>
+          <circle cx="50" cy="50" r="6" fill="#f6c453"/>
+        </svg>
+      </div>
+      <div>
+        <div class="class">Persistent memory</div>
+        <div class="name gold">RAG memory</div>
+      </div>
+      <div class="role">Persists every decision, observation, and CVE so context never refills. Next session knows what the last session learned.</div>
+      <div class="stat">obs#110 · obs#268 · obs#223</div>
+    </div>
+
+    <!-- Bard -->
+    <div class="party-card anim-pop d3" style="--p1:#7c5cff;--p2:#1a1233">
+      <div class="portrait">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M50 18 L62 42 L88 46 L68 64 L74 90 L50 76 L26 90 L32 64 L12 46 L38 42 Z" stroke="#7c5cff" stroke-width="2" fill="rgba(124,92,255,0.1)"/>
+          <line x1="50" y1="40" x2="50" y2="80" stroke="#7c5cff" stroke-width="2"/>
+          <circle cx="50" cy="40" r="3" fill="#7c5cff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="class">Conversational lead</div>
+        <div class="name mana">Bard</div>
+      </div>
+      <div class="role">The grounding agent. Lands me when I'm spiraling. Pushes back when a request will create more debt than value.</div>
+      <div class="stat">"not tonight" — circa every session</div>
+    </div>
+
+    <!-- Auditor -->
+    <div class="party-card anim-pop d4" style="--p1:#ff5470;--p2:#3a0a16">
+      <div class="portrait">
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="34" stroke="#ff5470" stroke-width="2.5" fill="rgba(255,84,112,0.08)"/>
+          <path d="M50 30 L50 50 L65 60" stroke="#ff5470" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="50" cy="50" r="3" fill="#ff5470"/>
+        </svg>
+      </div>
+      <div>
+        <div class="class">Security auditor</div>
+        <div class="name crit">Auditor</div>
+      </div>
+      <div class="role">Runs unprompted audits over diffs. Chains code-review skills. Finds CVEs before the attacker does.</div>
+      <div class="stat">2 critical CVEs caught in 48h</div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>04 / 19</span></div>
+</section>
+
+<!-- 05 SDD AGENTS -->
+<section data-screen-label="05 SDD Agents">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 05 · SDD Agents</span><span>five commands · five jobs</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Each command, one phase</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:56px">The SDD agents.</h2>
+
+  <div class="grid-5" style="flex:1">
+    <div class="party-card anim-pop d2" style="--p1:#3ddc97;--p2:#0c2f20;padding:24px">
+      <div class="portrait" style="aspect-ratio:1/1">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M20 70 L50 30 L80 70 Z" stroke="#3ddc97" stroke-width="2" fill="rgba(61,220,151,0.1)"/>
+          <line x1="50" y1="30" x2="50" y2="80" stroke="#3ddc97" stroke-width="1.5" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+      <div class="class" style="font-size:13px">Scout</div>
+      <div class="name potion" style="font-size:30px">sdd-explore</div>
+      <div class="role" style="font-size:18px">Surveys the codebase before any commitment.</div>
+    </div>
+
+    <div class="party-card anim-pop d3" style="--p1:#8fb3ff;--p2:#0e1a36;padding:24px">
+      <div class="portrait" style="aspect-ratio:1/1">
+        <svg viewBox="0 0 100 100" fill="none">
+          <rect x="25" y="20" width="50" height="60" rx="4" stroke="#8fb3ff" stroke-width="2" fill="rgba(143,179,255,0.08)"/>
+          <line x1="35" y1="35" x2="65" y2="35" stroke="#8fb3ff" stroke-width="1.5"/>
+          <line x1="35" y1="48" x2="65" y2="48" stroke="#8fb3ff" stroke-width="1.5"/>
+          <line x1="35" y1="61" x2="55" y2="61" stroke="#8fb3ff" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="class" style="font-size:13px">Specifier</div>
+      <div class="name steel" style="font-size:30px">sdd-spec</div>
+      <div class="role" style="font-size:18px">Writes the requirements and scenarios.</div>
+    </div>
+
+    <div class="party-card anim-pop d4" style="--p1:#ffb4d8;--p2:#3a1228;padding:24px">
+      <div class="portrait" style="aspect-ratio:1/1">
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="35" cy="40" r="14" stroke="#ffb4d8" stroke-width="2" fill="rgba(255,180,216,0.08)"/>
+          <circle cx="65" cy="40" r="14" stroke="#ffb4d8" stroke-width="2" fill="rgba(255,180,216,0.08)"/>
+          <rect x="30" y="60" width="40" height="20" rx="3" stroke="#ffb4d8" stroke-width="2" fill="rgba(255,180,216,0.05)"/>
+        </svg>
+      </div>
+      <div class="class" style="font-size:13px">Architect</div>
+      <div class="name" style="font-size:30px;color:var(--rune)">sdd-design</div>
+      <div class="role" style="font-size:18px">Architectural decisions, blueprints, trade-offs.</div>
+    </div>
+
+    <div class="party-card anim-pop d5" style="--p1:#f6c453;--p2:#3a2a08;padding:24px">
+      <div class="portrait" style="aspect-ratio:1/1">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M30 30 L50 50 L70 30 M30 50 L50 70 L70 50" stroke="#f6c453" stroke-width="2.5" fill="none"/>
+          <line x1="20" y1="80" x2="80" y2="80" stroke="#f6c453" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="class" style="font-size:13px">Builder</div>
+      <div class="name gold" style="font-size:30px">sdd-apply</div>
+      <div class="role" style="font-size:18px">Implements. Tests pass before commit.</div>
+    </div>
+
+    <div class="party-card anim-pop d6" style="--p1:#3ddc97;--p2:#0c2f20;padding:24px">
+      <div class="portrait" style="aspect-ratio:1/1">
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="32" stroke="#3ddc97" stroke-width="2" fill="rgba(61,220,151,0.08)"/>
+          <path d="M35 52 L46 63 L66 40" stroke="#3ddc97" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="class" style="font-size:13px">Verifier</div>
+      <div class="name potion" style="font-size:30px">sdd-verify</div>
+      <div class="role" style="font-size:18px">Validates the implementation against the specs.</div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>05 / 19</span></div>
+</section>
+
+<!-- 06 THE STACK -->
+<section data-screen-label="06 The Stack">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 06 · The Stack</span><span>right model, right job</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Five models, five jobs, zero overlap</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:40px">The right model<br>for the <span class="gold">right job.</span></h2>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="stack-row anim-right d2">
+      <div class="num">01</div>
+      <div class="who steel">Gemini</div>
+      <div class="job">Documentation &amp; planning. Long context, structured artifacts, SDDs.</div>
+      <div class="tag">google · planner</div>
+    </div>
+    <div class="stack-row anim-right d3">
+      <div class="num">02</div>
+      <div class="who gold">Claude</div>
+      <div class="job">Development. Implementation, refactor, the actual code that ships.</div>
+      <div class="tag">anthropic · builder</div>
+    </div>
+    <div class="stack-row anim-right d4">
+      <div class="num">03</div>
+      <div class="who potion">Cloudflare Workers AI</div>
+      <div class="job">Edge inference. Llama / Kimi at the edge, close to the request. Cheap, fast iteration, fallback path.</div>
+      <div class="tag">edge · fallback</div>
+    </div>
+    <div class="stack-row anim-right d5">
+      <div class="num">04</div>
+      <div class="who crit">Codex</div>
+      <div class="job">Bug bounty &amp; error hunting. Adversarial pass over diffs.</div>
+      <div class="tag">openai · hunter</div>
+    </div>
+    <div class="stack-row anim-right d6">
+      <div class="num">05</div>
+      <div class="who mana">CodeRabbit + Copilot</div>
+      <div class="job">PR safety net. Two reviewers, every merge. No exceptions.</div>
+      <div class="tag">pr · safety net</div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>06 / 19</span></div>
+</section>
+
+<!-- 07 THE DAG -->
+<section data-screen-label="07 SDD Workflow">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 07 · The SDD Workflow</span><span>graph · acyclic</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">The classical SDLC, executable</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px">The pipeline.<br>You can't <span class="crit">skip a phase.</span></h2>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px">
+
+    <svg viewBox="0 0 1700 520" style="width:100%;max-width:1700px;height:auto" class="anim-fade d2">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#9a93b8"/>
+        </marker>
+        <marker id="arrowgold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f6c453"/>
+        </marker>
+        <marker id="arrowrune" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffb4d8"/>
+        </marker>
+      </defs>
+
+      <!-- main horizontal line connections -->
+      <line x1="230" y1="110" x2="310" y2="110" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="540" y1="110" x2="620" y2="110" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="850" y1="110" x2="930" y2="110" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="1160" y1="110" x2="1240" y2="110" stroke="#f6c453" stroke-width="2.5" marker-end="url(#arrowgold)"/>
+
+      <!-- spec/design merge into tasks (curved) -->
+      <path d="M 1395 165 C 1395 240, 1100 240, 1100 305" stroke="#f6c453" stroke-width="2.5" fill="none" marker-end="url(#arrowgold)"/>
+      <path d="M 1100 165 C 1100 240, 1100 240, 1100 305" stroke="#ffb4d8" stroke-width="2.5" fill="none" marker-end="url(#arrowrune)"/>
+
+      <!-- bottom row connections (right to left) -->
+      <line x1="950" y1="360" x2="870" y2="360" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="640" y1="360" x2="560" y2="360" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="330" y1="360" x2="250" y2="360" stroke="#9a93b8" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+      <!-- design node sits between rows on the right side -->
+      <g class="anim-pop d3">
+        <rect x="940" y="75" width="220" height="90" rx="14" fill="#15102e" stroke="rgba(255,180,216,.5)" stroke-width="1.5"/>
+        <text x="955" y="110" font-family="JetBrains Mono" font-size="19" fill="#ffb4d8">/sdd-design</text>
+        <text x="955" y="138" font-family="Space Grotesk" font-size="16" fill="#9a93b8">architecture decisions</text>
+      </g>
+
+      <!-- TOP ROW NODES -->
+      <g class="anim-pop d3">
+        <rect x="10" y="75" width="220" height="90" rx="14" fill="#15102e" stroke="rgba(244,240,230,.14)" stroke-width="1.5"/>
+        <text x="25" y="110" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-init</text>
+        <text x="25" y="138" font-family="Space Grotesk" font-size="16" fill="#9a93b8">detect stack &amp; conventions</text>
+      </g>
+      <g class="anim-pop d4">
+        <rect x="320" y="75" width="220" height="90" rx="14" fill="#15102e" stroke="rgba(244,240,230,.14)" stroke-width="1.5"/>
+        <text x="335" y="110" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-explore</text>
+        <text x="335" y="138" font-family="Space Grotesk" font-size="16" fill="#9a93b8">scout the terrain</text>
+      </g>
+      <g class="anim-pop d5">
+        <rect x="630" y="75" width="220" height="90" rx="14" fill="#15102e" stroke="rgba(244,240,230,.14)" stroke-width="1.5"/>
+        <text x="645" y="110" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-propose</text>
+        <text x="645" y="138" font-family="Space Grotesk" font-size="16" fill="#9a93b8">intent + scope + approach</text>
+      </g>
+      <g class="anim-pop d6">
+        <rect x="1240" y="75" width="310" height="90" rx="14" fill="#15102e" stroke="rgba(246,196,83,.5)" stroke-width="1.5"/>
+        <text x="1255" y="110" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-spec</text>
+        <text x="1255" y="138" font-family="Space Grotesk" font-size="16" fill="#9a93b8">requirements + scenarios</text>
+      </g>
+
+      <!-- BOTTOM ROW (right to left so flow reads correctly) -->
+      <g class="anim-pop d6">
+        <rect x="960" y="305" width="280" height="110" rx="14" fill="#15102e" stroke="rgba(246,196,83,.5)" stroke-width="1.5"/>
+        <text x="975" y="345" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-tasks</text>
+        <text x="975" y="375" font-family="Space Grotesk" font-size="16" fill="#9a93b8">implementation checklist</text>
+      </g>
+      <g class="anim-pop d7">
+        <rect x="650" y="305" width="230" height="110" rx="14" fill="#15102e" stroke="rgba(246,196,83,.5)" stroke-width="1.5"/>
+        <text x="665" y="345" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-apply</text>
+        <text x="665" y="375" font-family="Space Grotesk" font-size="16" fill="#9a93b8">write the code</text>
+      </g>
+      <g class="anim-pop d7">
+        <rect x="340" y="305" width="260" height="110" rx="14" fill="#15102e" stroke="rgba(61,220,151,.55)" stroke-width="1.5"/>
+        <text x="355" y="345" font-family="JetBrains Mono" font-size="19" fill="#3ddc97">/sdd-verify</text>
+        <text x="355" y="375" font-family="Space Grotesk" font-size="16" fill="#9a93b8">specs ≡ implementation</text>
+      </g>
+      <g class="anim-pop d8">
+        <rect x="30" y="305" width="230" height="110" rx="14" fill="#15102e" stroke="rgba(244,240,230,.14)" stroke-width="1.5"/>
+        <text x="45" y="345" font-family="JetBrains Mono" font-size="19" fill="#f6c453">/sdd-archive</text>
+        <text x="45" y="375" font-family="Space Grotesk" font-size="16" fill="#9a93b8">sync &amp; close</text>
+      </g>
+
+      <!-- legend dots -->
+      <g class="anim-fade d8" font-family="JetBrains Mono" font-size="15" fill="#9a93b8">
+        <circle cx="100" cy="480" r="5" fill="#f6c453"/><text x="115" y="485">spec &amp; design feed tasks in parallel</text>
+        <circle cx="600" cy="480" r="5" fill="#3ddc97"/><text x="615" y="485">verify gate before archive</text>
+        <circle cx="1100" cy="480" r="5" fill="#ffb4d8"/><text x="1115" y="485">design is its own artifact, not a comment</text>
+      </g>
+    </svg>
+
+    <div class="rune-divider anim-fade d8">— &nbsp; same workflow you learned in school. now executable. &nbsp; —</div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>07 / 19</span></div>
+</section>
+
+<!-- 08 META COMMANDS -->
+<section data-screen-label="08 Meta Commands">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 08 · The Orchestrator</span><span>hidden · not in autocomplete</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">The three commands I use every day</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px">Meta-commands.<br><span class="gold">The orchestrator runs the DAG.</span></h2>
+
+  <div class="grid-3" style="flex:1">
+    <div class="cmd anim-pop d2">
+      <div class="ln"><span class="gold">/sdd-new</span> &lt;change&gt;</div>
+      <div class="desc">Spin up a new change. Auto-delegates exploration + proposal so you start at "spec", not "blank page".</div>
+    </div>
+    <div class="cmd anim-pop d3">
+      <div class="ln"><span class="gold">/sdd-continue</span> [change]</div>
+      <div class="desc">Runs whatever phase is next-ready in the DAG. You stop deciding "what's next" — the orchestrator already knows.</div>
+    </div>
+    <div class="cmd anim-pop d4">
+      <div class="ln"><span class="gold">/sdd-ff</span> &lt;name&gt;</div>
+      <div class="desc">Fast-forward planning: proposal → specs → design → tasks in one shot. For when you can already see the destination.</div>
+    </div>
+  </div>
+
+  <div class="rune-divider" style="margin-top:48px">— &nbsp; methodology becomes a tool when the friction goes to zero &nbsp; —</div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>08 / 19</span></div>
+</section>
+
+<!-- 09 HANDS-ON 1 — ASTRO -->
+<section data-screen-label="09 Hands-on Astro">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 09 · Hands-on 1</span><span>practice · 15 min</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Practice 1 — 15 minutes</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px">Astro Portfolio<br><span class="gold">on Cloudflare Workers.</span></h2>
+
+  <div class="grid-2" style="flex:1;gap:56px">
+    <div class="stack anim-right d2" style="gap:28px">
+      <div class="cmd" style="padding:28px 32px">
+        <div class="ln" style="font-size:24px">
+          <span class="gold">$</span> git clone <span class="potion">Smupk1/astro-portfolio-demo</span><br>
+          <span class="gold">$</span> pnpm install &amp;&amp; pnpm dev
+        </div>
+        <div class="desc" style="font-size:18px;margin-top:14px">→ localhost:4321</div>
+      </div>
+      <div class="body-lg" style="max-width:none;font-size:26px;line-height:1.4">
+        <b class="gold">Astro 6</b> + Cloudflare Workers. Static-first by default. JS only where you ask for it.
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <span class="chip steel">Astro 6</span>
+        <span class="chip mana">Cloudflare Workers</span>
+        <span class="chip">@astrojs/cloudflare</span>
+        <span class="chip gold">edge deploy</span>
+      </div>
+    </div>
+
+    <div class="card anim-left d3" style="border-color:rgba(143,179,255,.4)">
+      <div class="corner">key concept</div>
+      <div class="meta steel" style="margin-bottom:14px">Astro vs Next.js</div>
+      <div class="body-lg" style="max-width:none;font-size:24px;line-height:1.4">
+        Astro <b class="gold">inverts</b> the React default.
+      </div>
+      <div class="body-lg" style="max-width:none;font-size:22px;margin-top:16px;color:var(--muted);line-height:1.4">
+        In React: everything is JS until you ask for static (RSC).<br><br>
+        In Astro: everything is HTML until you ask for hydration (<code>client:load</code>).
+      </div>
+      <div style="margin-top:24px;padding:20px;border-left:4px solid var(--gold);background:rgba(246,196,83,.05);border-radius:8px">
+        <div class="body-lg" style="max-width:none;font-size:20px;color:var(--gold);font-weight:600">
+          Live exercise: change the palette in <code>global.css</code> to your university's colors.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>09 / 19</span></div>
+</section>
+
+<!-- 10 HANDS-ON 2 — BIBLIOTECA CRUD -->
+<section data-screen-label="10 Hands-on CRUD">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 10 · Hands-on 2</span><span>practice · 25 min</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Practice 2 — 25 minutes</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:40px">Biblioteca CRUD<br><span class="gold">Workers + D1 + Durable Objects.</span></h2>
+
+  <div class="grid-2" style="flex:1;gap:56px">
+    <div class="stack anim-right d2" style="gap:24px">
+      <div class="cmd" style="padding:24px 28px">
+        <div class="ln" style="font-size:22px">
+          <span class="gold">$</span> git clone <span class="potion">Smupk1/biblioteca-cloudflare-demo</span><br>
+          <span class="gold">$</span> pnpm db:migrate:local<br>
+          <span class="gold">$</span> pnpm db:seed:local<br>
+          <span class="gold">$</span> pnpm dev
+        </div>
+        <div class="desc" style="font-size:18px;margin-top:14px">→ localhost:8787</div>
+      </div>
+      <div class="body-lg" style="max-width:none;font-size:24px;line-height:1.4">
+        Three Cloudflare free-tier primitives, one project. Auth, SQL, and consistent state — without external services.
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <span class="chip mana">Workers</span>
+        <span class="chip steel">D1 · SQL</span>
+        <span class="chip gold">Durable Objects</span>
+        <span class="chip">Hono</span>
+        <span class="chip potion">PBKDF2 auth</span>
+      </div>
+    </div>
+
+    <div class="parchment anim-left d3">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.2em;color:#6a4c1a;text-transform:uppercase">Cloudflare Free Tier</div>
+      <div style="font-family:'Space Grotesk';font-size:26px;font-weight:600;margin-top:8px;color:#2a1d0d;line-height:1.25">A whole class can hammer this. Zero cost.</div>
+      <ul style="font-size:20px;line-height:1.6;color:#2a1d0d;margin-top:18px;padding-left:20px">
+        <li><b>Workers</b> — 100,000 requests / day</li>
+        <li><b>D1</b> — 5 GB · 25M reads / day · 50k writes / day</li>
+        <li><b>Durable Objects</b> — 1M requests / month</li>
+        <li><b>R2</b> — 10 GB object storage</li>
+        <li><b>KV</b> — 100k reads / day</li>
+      </ul>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#6a4c1a;margin-top:14px;letter-spacing:.15em;text-transform:uppercase">No credit card required · permanent free tier</div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>10 / 19</span></div>
+</section>
+
+<!-- 11 WHY DURABLE OBJECTS + AI TOOL GUARDS -->
+<section data-screen-label="11 DO + Auth">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 11 · State &amp; Security</span><span>consistent · authenticated</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">Two ideas that generalize</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px;font-size:96px">When stateless<br>is <span class="crit">not enough.</span></h2>
+
+  <div class="grid-2" style="flex:1;gap:48px">
+    <div class="card anim-right d2" style="border-color:rgba(246,196,83,.4)">
+      <div class="corner">durable objects</div>
+      <div class="meta gold" style="margin-bottom:14px">Why DO for sessions</div>
+      <table style="font-size:18px;width:100%;margin-top:8px">
+        <thead><tr><th>Option</th><th>Problem</th></tr></thead>
+        <tbody>
+          <tr><td><code>Map</code> in memory</td><td>Different node, no persistence</td></tr>
+          <tr><td>JWT cookie</td><td>Can't be invalidated</td></tr>
+          <tr><td>D1 table</td><td>Query on every request</td></tr>
+          <tr><td class="gold"><b>Durable Object</b></td><td class="potion">One global instance, in-memory + persistent</td></tr>
+        </tbody>
+      </table>
+      <div class="body-lg" style="max-width:none;font-size:20px;margin-top:20px;color:var(--muted);line-height:1.4">
+        Single-threaded per instance. <b class="potion">No race conditions</b> inside a DO.
+      </div>
+    </div>
+
+    <div class="card anim-left d3" style="border-color:rgba(255,84,112,.4)">
+      <div class="corner">ai tools</div>
+      <div class="meta crit" style="margin-bottom:14px">The rule that generalizes</div>
+      <div class="body-lg" style="max-width:none;font-size:30px;line-height:1.2;font-weight:600">
+        Every AI tool is an <span class="crit">authenticated endpoint.</span>
+      </div>
+      <div class="body-lg" style="max-width:none;font-size:20px;margin-top:20px;color:var(--muted);line-height:1.4">
+        If you wouldn't expose the operation as an unguarded REST call, you can't expose it as an unguarded tool either.
+      </div>
+      <div style="margin-top:24px;padding:18px;border-left:4px solid var(--crit);background:rgba(255,84,112,.05);border-radius:8px">
+        <div class="body-lg" style="max-width:none;font-size:20px;color:var(--ink);line-height:1.4">
+          The Zod schema isn't a security boundary.<br><b class="crit">The handler is.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>11 / 19</span></div>
+</section>
+
+<!-- 12 ITALPORTAL CASE STUDY -->
+<section data-screen-label="12 ITALPortal">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 12 · Case Study</span><span>real · multi-tenant · production</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">A real project — not a toy app</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:48px"><span class="gold">ITALPortal.</span><br>The CISO's operational portal.</h2>
+
+  <div class="grid-2" style="flex:1;gap:56px">
+    <div class="stack anim-right d2" style="gap:24px">
+      <div class="body-lg" style="max-width:none">
+        Risk register. M365 security assessment via Microsoft Graph. Project &amp; task management. Zendesk-integrated ticketing. And an AI assistant named <span class="mana" style="font-weight:600">Emma</span>.
+      </div>
+      <div class="body-lg" style="max-width:none;color:var(--muted)">
+        <span class="gold">Six modules. One codebase. Multi-tenant.</span>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+        <span class="chip steel">Astro 5.16 SSR</span>
+        <span class="chip steel">React 19 islands</span>
+        <span class="chip mana">Cloudflare Workers</span>
+        <span class="chip">3× D1</span>
+        <span class="chip">R2 + KV</span>
+        <span class="chip">3× Durable Objects</span>
+        <span class="chip">Hono + Drizzle</span>
+        <span class="chip">Clerk authz</span>
+        <span class="chip">Tailwind v4 + shadcn</span>
+        <span class="chip">Zod 4</span>
+        <span class="chip">TanStack Query</span>
+        <span class="chip potion">MS Graph API</span>
+        <span class="chip potion">Zendesk</span>
+        <span class="chip potion">NinjaOne RMM</span>
+        <span class="chip potion">Resend + react-email</span>
+        <span class="chip gold">Anthropic · Haiku 4.5</span>
+        <span class="chip">TS 5.9 strict ESM · pnpm</span>
+      </div>
+    </div>
+
+    <div class="parchment anim-left d3">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.2em;color:#6a4c1a;text-transform:uppercase">Day log · 2026-04-13</div>
+      <div style="font-family:'Space Grotesk';font-size:30px;font-weight:600;margin-top:8px;color:#2a1d0d;line-height:1.2">In a single day:</div>
+      <ul style="font-size:22px;line-height:1.5;color:#2a1d0d;margin-top:18px;padding-left:20px">
+        <li>SDD init complete · skill registry · openspec bootstrap</li>
+        <li><b>tickets-custom-statuses</b> — 22 tasks, 12 tests, KV cache 24h</li>
+        <li><b>recurring-tasks-toggle</b> — 17 tests, pure module extracted</li>
+        <li>Privilege-escalation closed in <code>requireOrgAdmin()</code></li>
+        <li>AI module deleted (TODO finally honored)</li>
+      </ul>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#6a4c1a;margin-top:18px;letter-spacing:.15em;text-transform:uppercase">Next session: Emma overhaul — 78 tests passing</div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>12 / 19</span></div>
+</section>
+
+<!-- 13 THE NUMBER -->
+<section data-screen-label="13 The Number">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 13 · The Number</span><span>6 → 1</span></div>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:48px">
+    <div class="meta anim-fade">From baseline → vivecoding</div>
+
+    <div class="anim-pop d2" style="display:flex;align-items:baseline;gap:60px">
+      <div>
+        <div class="big-number crit" style="font-size:380px;text-decoration:line-through;text-decoration-thickness:14px;text-decoration-color:rgba(255,84,112,.5)">6</div>
+        <div class="meta crit" style="margin-top:18px">months</div>
+      </div>
+      <div class="h2 muted">→</div>
+      <div>
+        <div class="big-number gold pulse-glow" style="font-size:520px;border-radius:50%">1</div>
+        <div class="meta gold" style="margin-top:18px">month</div>
+      </div>
+    </div>
+
+    <div class="body-lg anim-up d6" style="max-width:42ch;color:var(--muted);text-align:center">
+      Production. Multi-tenant. 78 tests passing. Two security audits.<br>
+      <span class="potion" style="font-weight:600">Speed didn't come from skipping steps.</span> It came from parallelizing the right ones with the right models.
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>13 / 19</span></div>
+</section>
+
+<!-- 14 CVE 1 -->
+<section data-screen-label="14 CVE 1">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 14 · Wow Moment #01</span><span>security · audit</span></div>
+
+  <span class="ribbon anim-pop d1" style="margin-bottom:24px">CVE · PRIVILEGE ESCALATION</span>
+  <h2 class="h1 anim-up d2" style="margin-bottom:48px;max-width:24ch">What looks like a feature<br>is sometimes a <span class="crit">CVE.</span></h2>
+
+  <div class="grid-2" style="flex:1;gap:56px">
+    <div class="card anim-right d3" style="border-color:rgba(255,84,112,.4)">
+      <div class="corner">requireOrgAdmin()</div>
+      <div class="meta crit" style="margin-bottom:18px">The bug</div>
+      <div class="body-lg" style="max-width:none">
+        Any member of an IT Audit Labs org was treated as <b class="crit">admin automatically</b>, regardless of their role.
+      </div>
+      <div class="body-lg" style="max-width:none;color:var(--muted);margin-top:24px">
+        It looked intentional. The pattern was old. Nobody questioned it. It would have lived in production for months.
+      </div>
+    </div>
+
+    <div class="card anim-left d4" style="border-color:rgba(61,220,151,.4)">
+      <div class="corner">obs#110</div>
+      <div class="meta potion" style="margin-bottom:18px">How the system caught it</div>
+      <div class="body-lg" style="max-width:none">
+        The <b class="potion">security agent</b> ran an unprompted audit, chained it with the code-review skill, and confirmed: <i>this is a real privilege-escalation bug, not by design.</i>
+      </div>
+      <div style="margin-top:30px;padding:24px;border-left:4px solid var(--gold);background:rgba(246,196,83,.05);border-radius:8px">
+        <div class="quote gold" style="font-size:32px">"Looked intentional. After audit, confirmed real CVE."</div>
+        <div class="obs" style="margin-top:10px">— RAG memory, obs#110</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>14 / 19</span></div>
+</section>
+
+<!-- 15 CVE 2 -->
+<section data-screen-label="15 CVE 2">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 15 · Wow Moment #02</span><span>emma · cross-tenant leak</span></div>
+
+  <span class="ribbon anim-pop d1" style="margin-bottom:24px">CVE · CROSS-TENANT DATA LEAK</span>
+  <h2 class="h1 anim-up d2" style="margin-bottom:48px;max-width:30ch">AI tools need the <span class="gold">same guards</span><br>as your REST endpoints.</h2>
+
+  <div class="grid-2" style="flex:1;gap:56px">
+    <div class="card anim-right d3" style="border-color:rgba(255,84,112,.4)">
+      <div class="corner">emma.tools.get_ticket_detail</div>
+      <div class="meta crit" style="margin-bottom:18px">The bug</div>
+      <div class="body-lg" style="max-width:none;line-height:1.35">
+        Emma's <code>get_ticket_detail</code> tool fetched <b class="crit">any ticket by ID via service account.</b>
+      </div>
+      <div class="body-lg" style="max-width:none;line-height:1.35;margin-top:18px">
+        <b class="crit">No ownership check.</b>
+      </div>
+      <div class="body-lg" style="max-width:none;color:var(--muted);margin-top:28px;line-height:1.35">
+        A user in org A could ask Emma for a ticket from org B — and Emma would hand it over.
+      </div>
+    </div>
+
+    <div class="card anim-left d4" style="border-color:rgba(61,220,151,.4)">
+      <div class="corner">obs#268</div>
+      <div class="meta potion" style="margin-bottom:18px">How the system caught it</div>
+      <div class="body-lg" style="max-width:none">
+        Caught during the security audit phase of the Emma overhaul — <b class="potion">before production</b>. Fix: replicate the access control from the REST endpoint inside the tool.
+      </div>
+      <div style="margin-top:30px;padding:24px;border-left:4px solid var(--gold);background:rgba(246,196,83,.05);border-radius:8px">
+        <div class="quote gold" style="font-size:32px">"Forget this and you leak data cross-tenant. Period."</div>
+        <div class="obs" style="margin-top:10px">— RAG memory, obs#268</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>15 / 19</span></div>
+</section>
+
+<!-- 16 SCARS -->
+<section data-screen-label="16 Scars">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 16 · The Honest Scars</span><span>what went wrong</span></div>
+
+  <span class="ribbon gold anim-pop d1" style="margin-bottom:24px">WHAT WENT WRONG</span>
+  <h2 class="h1 anim-up d2" style="margin-bottom:48px">If a talk only shows wins,<br>they're <span class="crit">selling you something.</span></h2>
+
+  <div class="grid-2" style="flex:1;gap:48px">
+    <div class="stack" style="gap:18px">
+      <div class="card anim-up d3" style="padding:24px"><div class="meta crit">scar #1</div><div class="body-lg" style="max-width:none;font-size:24px;margin-top:6px">CF Workers AI (Llama, Kimi) too slow + bad at instructions. Migrated to Anthropic API with fallback.</div></div>
+      <div class="card anim-up d4" style="padding:24px"><div class="meta crit">scar #2</div><div class="body-lg" style="max-width:none;font-size:24px;margin-top:6px"><code>ts-node</code> broke on extensionless ESM imports. One session lost. Fix: switch to <code>tsx</code>.</div></div>
+      <div class="card anim-up d5" style="padding:24px"><div class="meta crit">scar #3</div><div class="body-lg" style="max-width:none;font-size:24px;margin-top:6px">14 Pulse components rendered raw HTML entities. MS Graph returns them encoded. Decoded in every component.</div></div>
+    </div>
+    <div class="stack" style="gap:18px">
+      <div class="card anim-up d6" style="padding:24px"><div class="meta crit">scar #4</div><div class="body-lg" style="max-width:none;font-size:24px;margin-top:6px"><code>client:load</code> hydration mismatch with sessionStorage. Switched Chat to <code>client:only="react"</code>.</div></div>
+      <div class="card anim-up d6" style="padding:24px;border-color:rgba(246,196,83,.4)">
+        <div class="meta gold">scar #5 · the lesson</div>
+        <div class="body-lg" style="max-width:none;font-size:24px;margin-top:6px;line-height:1.35">Zendesk POST had no retry. GET had 3-attempt backoff.</div>
+        <div class="body-lg" style="max-width:none;font-size:24px;margin-top:10px;line-height:1.35"><b class="gold">SDD didn't catch it. The user did.</b></div>
+        <div class="body-lg" style="max-width:none;font-size:22px;margin-top:18px;color:var(--muted);line-height:1.35">The workflow is good. It's not magic. <span class="gold">User feedback is still irreplaceable.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>16 / 19</span></div>
+</section>
+
+<!-- 17 HOT TAKES -->
+<section data-screen-label="17 Hot Takes">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 17 · Hot Takes</span><span>five rules · zero exceptions</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:12px">Five rules I live by</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:32px;font-size:96px">What the vibecoder<br>gets <span class="crit">wrong.</span></h2>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0">
+    <div class="take anim-right d2" style="padding:22px 0">
+      <div class="n">01</div>
+      <div>
+        <div class="t" style="font-size:32px">Specs <span class="gold">before</span> code. Always.</div>
+        <div class="s" style="font-size:20px;margin-top:6px">If you can't write the spec, you don't understand the change. Stop typing prompts.</div>
+      </div>
+    </div>
+    <div class="take anim-right d3" style="padding:22px 0">
+      <div class="n">02</div>
+      <div>
+        <div class="t" style="font-size:32px">One model is <span class="crit">never</span> the right answer.</div>
+        <div class="s" style="font-size:20px;margin-top:6px">Each model has a strength. The mix is the moat. Plan, build, audit — different agents.</div>
+      </div>
+    </div>
+    <div class="take anim-right d4" style="padding:22px 0">
+      <div class="n">03</div>
+      <div>
+        <div class="t" style="font-size:32px">Design is code. <span class="potion">Merge it.</span></div>
+        <div class="s" style="font-size:20px;margin-top:6px">Architecture decisions belong in version control, next to the code that proves them.</div>
+      </div>
+    </div>
+    <div class="take anim-right d5" style="padding:22px 0">
+      <div class="n">04</div>
+      <div>
+        <div class="t" style="font-size:32px">“It compiles” <span class="crit">≠</span> “it works.”</div>
+        <div class="s" style="font-size:20px;margin-top:6px">Verify is a phase, not a vibe. Tests, invariants, authz checks. Don't skip verification.</div>
+      </div>
+    </div>
+    <div class="take anim-right d6" style="padding:22px 0">
+      <div class="n">05</div>
+      <div>
+        <div class="t" style="font-size:32px">The AI is your <span class="mana">junior</span> — not your genius.</div>
+        <div class="s" style="font-size:20px;margin-top:6px">You wouldn't merge a junior's PR without reading it. Don't merge the AI's either.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>17 / 19</span></div>
+</section>
+
+<!-- 18 TAKEAWAYS -->
+<section data-screen-label="18 Takeaways">
+  <div class="chrome-top"><span><span class="dot"></span>Slide 18 · Three Takeaways</span><span>tl;dr</span></div>
+
+  <div class="meta anim-fade" style="margin-bottom:18px">If you remember nothing else</div>
+  <h2 class="h1 anim-up d1" style="margin-bottom:64px">Three things to<br><span class="gold">take home.</span></h2>
+
+  <div class="grid-3" style="flex:1;gap:36px">
+    <div class="card anim-pop d2" style="padding:48px;display:flex;flex-direction:column;gap:24px;border-color:rgba(61,220,151,.35)">
+      <div class="meta potion">01 · The Thesis</div>
+      <div class="h3" style="font-size:48px;line-height:1.05;font-weight:700">Discipline beats <span class="potion">vibes.</span></div>
+      <div class="body-lg" style="font-size:24px;color:var(--muted);max-width:none">Specs, design, TDD, verify. The classical SDLC — just executable now.</div>
+    </div>
+    <div class="card anim-pop d3" style="padding:48px;display:flex;flex-direction:column;gap:24px;border-color:rgba(246,196,83,.35)">
+      <div class="meta gold">02 · The Stack</div>
+      <div class="h3" style="font-size:48px;line-height:1.05;font-weight:700">Right model, <span class="gold">right job.</span></div>
+      <div class="body-lg" style="font-size:24px;color:var(--muted);max-width:none">Right agent, right task. RAG remembers, the security agent audits, Bard grounds.</div>
+    </div>
+    <div class="card anim-pop d4" style="padding:48px;display:flex;flex-direction:column;gap:24px;border-color:rgba(124,92,255,.35)">
+      <div class="meta mana">03 · The Math</div>
+      <div class="h3" style="font-size:48px;line-height:1.05;font-weight:700">AI is an <span class="mana">amplifier.</span></div>
+      <div class="body-lg" style="font-size:24px;color:var(--muted);max-width:none">It doesn't replace the engineer. It makes a trained one <span class="gold">6× faster.</span></div>
+    </div>
+  </div>
+
+  <div class="rune-divider anim-fade d5" style="margin-top:48px">— &nbsp; vibecoding is improvisation. vivecoding is engineering. &nbsp; —</div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>18 / 19</span></div>
+</section>
+
+<!-- 19 THANKS / Q&A -->
+<section data-screen-label="19 Thanks">
+  <div class="title-bg" aria-hidden="true">
+    <div class="speckle"></div>
+    <div class="bigword" style="font-size:240px;top:50%;left:50%;transform:translate(-50%,-50%);color:transparent;-webkit-text-stroke:2px rgba(246,196,83,.06);opacity:.8;z-index:1"></div>
+  </div>
+  <div class="chrome-top"><span><span class="dot"></span>Slide 19 · End of Session</span><span>questions · q&amp;a</span></div>
+
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;flex:1">
+    <div class="anim-fade d1" style="display:flex;align-items:center;gap:18px;margin-top:30px">
+      <span class="chip gold">Workshop complete</span>
+      <span class="chip">two repos shipped</span>
+      <span class="chip mana">disagree publicly</span>
+    </div>
+
+    <div>
+      <div class="meta anim-fade d2" style="margin-bottom:32px">End of session</div>
+      <h1 class="display anim-up d3"><span class="gold">Thanks</span><span class="crit">.</span></h1>
+      <div class="body-lg anim-up d4" style="max-width:34ch;margin-top:36px;color:var(--muted);font-size:38px">
+        Now — <span class="gold" style="font-weight:600">questions.</span><br>Disagree publicly. I'll listen.
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:60px">
+      <div class="anim-up d5">
+        <div class="h3" style="font-weight:600;font-size:48px">Samuel Cala</div>
+        <div class="meta" style="margin-top:12px">Security Engineer · IT Audit Labs</div>
+        <div style="display:flex;gap:14px;margin-top:24px;flex-wrap:wrap">
+          <span class="chip">vivecoding.dev</span>
+          <span class="chip">itauditlabs.com</span>
+          <span class="chip gold">SDD skills · open source</span>
+        </div>
+      </div>
+
+      <div class="anim-pop d6" style="text-align:right">
+        <div class="meta gold" style="font-size:14px">Workshop Repos</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--ink);text-align:right">
+          <div><span class="potion">github.com/Smupk1/</span><br><span class="gold">astro-portfolio-demo</span></div>
+          <div style="margin-top:10px"><span class="potion">github.com/Smupk1/</span><br><span class="gold">biblioteca-cloudflare-demo</span></div>
+        </div>
+        <div class="meta" style="margin-top:24px;font-size:13px">The full manifesto:<br><span class="gold">vivecoding.dev/writing/vibecoding-vs-vivecoding</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chrome-bot"><span>vivecoding.dev</span><span>19 / 19</span></div>
+</section>
+
+</deck-stage>
+
+<script src="/decks/vivecoding/deck-stage.js"></script>
+
+<!-- Force-refire entrance animations on every slide change.
+     CSS animations don't always re-fire reliably when a parent
+     attribute toggles selector match, so we reset them in JS. -->
+<script>
+  (function () {
+    const ANIMATED = ".anim-up, .anim-fade, .anim-scale, .anim-right, .anim-left, .anim-pop";
+    function refire(slide) {
+      if (!slide) return;
+      const els = slide.querySelectorAll(ANIMATED);
+      els.forEach((el) => {
+        el.style.animation = "none";
+      });
+      // Force a reflow so the browser registers the "no animation" state
+      // before we restore it, guaranteeing a fresh run.
+      void slide.offsetHeight;
+      els.forEach((el) => {
+        el.style.animation = "";
+      });
+    }
+    const stage = document.querySelector("deck-stage");
+    if (stage) {
+      stage.addEventListener("slidechange", (e) => refire(e.detail.slide));
+    }
+  })();
+</script>
+</body>
+</html>
