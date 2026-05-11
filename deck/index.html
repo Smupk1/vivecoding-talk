@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Vivecoding — Samuel Cala</title>
+<title>Vivecoding - Samuel Cala</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +45,7 @@
   @keyframes strikeIn { from { transform:scaleX(0); transform-origin:left } to { transform:scaleX(1); transform-origin:left } }
   @keyframes barFill { from { transform:scaleX(0); transform-origin:left } to { transform:scaleX(1); transform-origin:left } }
 
-  /* slides only animate when active (deck-stage sets data-active or aria-hidden=false on current section). We trigger via :target-like — but deck_stage swaps display, so animations re-run on each show. */
+  /* slides only animate when active (deck-stage sets data-active or aria-hidden=false on current section). We trigger via :target-like - but deck_stage swaps display, so animations re-run on each show. */
   deck-stage > section > *{ will-change:opacity, transform }
 
   .anim-fadeup    { animation: fadeUp .7s cubic-bezier(.22,.9,.3,1) both }
@@ -281,7 +281,7 @@
   .d7{animation-delay:.80s !important}
   .d8{animation-delay:.92s !important}
 
-  /* slide cross-fade transition (deck-stage swaps slides — we fade the active one in) */
+  /* slide cross-fade transition (deck-stage swaps slides - we fade the active one in) */
   deck-stage > section { transition: opacity .35s ease; }
 
   /* title big-word slow drift */
@@ -317,15 +317,15 @@
 
 <script type="application/json" id="speaker-notes">
 [
-  "Buenas. Soy Samuel Cala, Security Engineer en IT Audit Labs. Hoy es un workshop de noventa minutos sobre vivecoding — la metodología de ingeniería asistida por IA que practico todos los días. Dos repos reales como práctica hands-on. Una tesis: vibecoding es improvisación, vivecoding es ingeniería. Vamos.",
-  "Confesión rápida. Durante años pronuncié mal la palabra. Vibecoding. Yo decía vivecoding. Me lo corrigieron en un tablero, me dio vergüenza. Pero después miré lo que realmente hago — y resulta que tenía razón sin saberlo. Lo que yo hago no es vibecoding. Es algo distinto. Es lo que pasa cuando un ingeniero deja de improvisar y empieza a entregar.",
+  "Buenas. Soy Samuel Cala, Security Engineer en IT Audit Labs. Hoy es un workshop de noventa minutos sobre vivecoding - la metodología de ingeniería asistida por IA que practico todos los días. Dos repos reales como práctica hands-on. Una tesis: vibecoding es improvisación, vivecoding es ingeniería. Vamos.",
+  "Confesión rápida. Durante años pronuncié mal la palabra. Vibecoding. Yo decía vivecoding. Me lo corrigieron en un tablero, me dio vergüenza. Pero después miré lo que realmente hago - y resulta que tenía razón sin saberlo. Lo que yo hago no es vibecoding. Es algo distinto. Es lo que pasa cuando un ingeniero deja de improvisar y empieza a entregar.",
   "Esta es la tesis. A la izquierda, vibecoding: prompt al modelo, ship lo que caiga, sin specs, sin design, sin tests, sin code review. A la derecha, vivecoding: disciplina de ingeniería de software de verdad. Specs primero. Design documents. TDD. Multi-LLM cross-check. Code review automatizado. La IA es un amplificador, no un reemplazo del oficio. Misma herramienta, mismos modelos. Disciplina distinta.",
-  "Yo no codeo solo. Orquesto. Tres agentes principales hacen trabajo especializado. RAG memory persiste cada decisión, observación y CVE — el contexto nunca se reinicia. Bard es el agente conversacional, el que me aterriza cuando estoy espiralizando. Y el Auditor audita seguridad — cazó dos CVEs reales en cuarenta y ocho horas. Cada agente, una función. Yo orquesto.",
+  "Yo no codeo solo. Orquesto. Tres agentes principales hacen trabajo especializado. RAG memory persiste cada decisión, observación y CVE - el contexto nunca se reinicia. Bard es el agente conversacional, el que me aterriza cuando estoy espiralizando. Y el Auditor audita seguridad - cazó dos CVEs reales en cuarenta y ocho horas. Cada agente, una función. Yo orquesto.",
   "Después están los agentes SDD. Cada comando es una fase del Software Development Lifecycle clásico. sdd-explore reconoce el codebase. sdd-spec escribe requirements. sdd-design toma decisiones arquitecturales. sdd-apply implementa. sdd-verify valida. Cinco comandos, cinco fases, cero overlap. El mismo workflow que aprendieron en la universidad. Ahora ejecutable.",
   "El stack. Regla número uno: el modelo correcto para el trabajo correcto. Gemini para documentación y planning, contexto largo y estructura. Claude para desarrollo, implementación, refactor, código real que va a producción. Cloudflare Workers AI para edge inference barata y rápida, fallback path cuando no quieres depender de una API. Codex para bug bounty y error hunting. Y en los PRs dos safety nets: CodeRabbit y Copilot. Doble revisión automatizada antes de mergear. Cinco modelos, cinco trabajos, cero overlap.",
   "El corazón del workflow: el SDD pipeline. Es un DAG de comandos que ejecutan las fases del SDLC clásico. Init, explore, propose, spec, design, tasks, apply, verify, archive. Spec y design corren en paralelo y alimentan tasks. Apply genera código. Verify es un gate, no una vibra. Archive cierra. No se puede saltar fases. Esa es la disciplina.",
   "Arriba del DAG hay tres meta-comandos del orchestrator. sdd-new arranca un cambio nuevo. sdd-continue corre la próxima fase que esté lista. sdd-ff es fast-forward de planning: propuesta a specs a design a tasks de un saque. Estos tres convierten el workflow de pesado a fluido. La metodología se vuelve herramienta cuando la fricción llega a cero.",
-  "Hands-on uno: portfolio en Astro. Clonen el repo, corran pnpm dev, abran localhost:4321. El concepto clave: Astro invierte el default de React. En React todo es JavaScript hasta que pides estático. En Astro todo es HTML hasta que pides hidratación. No es performance. Es diseño — cambia qué decisiones tomas sin pensar. Ejercicio en vivo: cambien la paleta de colores en global.css a los colores de su universidad y observen el hot-reload.",
+  "Hands-on uno: portfolio en Astro. Clonen el repo, corran pnpm dev, abran localhost:4321. El concepto clave: Astro invierte el default de React. En React todo es JavaScript hasta que pides estático. En Astro todo es HTML hasta que pides hidratación. No es performance. Es diseño - cambia qué decisiones tomas sin pensar. Ejercicio en vivo: cambien la paleta de colores en global.css a los colores de su universidad y observen el hot-reload.",
   "Hands-on dos: biblioteca CRUD con Cloudflare Workers, D1 y Durable Objects. Tres primitivas del free tier en un solo proyecto. Workers para compute, D1 para SQL, DO para estado consistente. Plan gratuito real: cien mil requests por día en Workers, cinco GB en D1, un millón de requests por mes en Durable Objects. Una clase entera puede martillar este stack sin que cueste un peso.",
   "Dos ideas que generalizan. Una: ¿por qué un Durable Object para sesiones? Porque un Map en memoria no persiste entre nodos, un JWT no se puede invalidar, una tabla SQL te cuesta una query por request. Un DO te da una instancia global, in-memory, persistente, sin race conditions. Dos: cada AI tool es un endpoint autenticado. Si no expondrían la operación como REST sin guardias, no pueden exponerla como tool sin guardias. El schema Zod no es un boundary de seguridad. El handler sí.",
   "Caso real: ITALPortal. Portal operativo del CISO. Risk register, M365 security assessment, project management, ticketing con Zendesk, asistente AI llamado Emma. Multi-tenant. Astro 5 con React 19 sobre Cloudflare Workers. Tres bases D1, R2, KV. Tres Durable Objects. Producción, multi-cliente, datos sensibles. No un toy project.",
@@ -333,8 +333,8 @@
   "CVE uno. La función requireOrgAdmin tenía un bypass: cualquier miembro de una org era tratado como admin automáticamente. Parecía intencional. El patrón era viejo. Nadie lo cuestionaba. Habría vivido en producción durante meses. El agente de seguridad corrió un audit sin que se lo pidieran, lo encadenó con code-review, y confirmó: bug real, no design choice. Lección: lo que parece feature, a veces es CVE.",
   "CVE dos. Emma tenía un tool llamado get_ticket_detail que fetcheaba cualquier ticket por ID vía service account. Sin chequeo de ownership. Cross-tenant data leak. Un usuario de la org A podía pedirle a Emma un ticket de la org B. Cazado durante la auditoría de seguridad del rework, antes de producción. La lección generaliza: cada AI tool es un endpoint autenticado.",
   "Las cicatrices. Cinco cosas que no salieron bien. Workers AI con Llama y Kimi era demasiado lento. ts-node se rompió con ESM extensionless imports. Catorce componentes renderizando HTML entities crudos de MS Graph. client:load hydration mismatch con sessionStorage. Y la lección: Zendesk POST sin retry, SDD no lo cazó, el usuario sí. El workflow es bueno. No es magia. El feedback del usuario sigue siendo irreemplazable.",
-  "Las cinco reglas. Una: specs antes del código, siempre. Si no puedes escribir el spec, no entiendes el cambio. Dos: un solo modelo nunca es la respuesta. La mezcla es el moat. Tres: design is code, mergealo en el repo. Cuatro: compila no es funciona — verify es una fase. Cinco: la IA es tu junior, no tu genius. No mergees código que un junior no leíste, no mergees el de la IA tampoco.",
-  "Tres sentencias para llevarse a casa. Una: disciplina le gana a vibras. Dos: el modelo correcto para el trabajo correcto. Tres: la IA es un amplificador — al ingeniero entrenado lo hace seis veces más rápido. Vibecoding es improvisación. Vivecoding es ingeniería.",
+  "Las cinco reglas. Una: specs antes del código, siempre. Si no puedes escribir el spec, no entiendes el cambio. Dos: un solo modelo nunca es la respuesta. La mezcla es el moat. Tres: design is code, mergealo en el repo. Cuatro: compila no es funciona - verify es una fase. Cinco: la IA es tu junior, no tu genius. No mergees código que un junior no leíste, no mergees el de la IA tampoco.",
+  "Tres sentencias para llevarse a casa. Una: disciplina le gana a vibras. Dos: el modelo correcto para el trabajo correcto. Tres: la IA es un amplificador - al ingeniero entrenado lo hace seis veces más rápido. Vibecoding es improvisación. Vivecoding es ingeniería.",
   "Ahí quedamos. Soy Samuel Cala, Security Engineer en IT Audit Labs. Los dos repos del workshop están públicos. El manifiesto completo está en vivecoding.dev. Preguntas. Disagree publicly. Los escucho."
 ]
 </script>
@@ -360,7 +360,7 @@
       <div class="meta anim-fade d2" style="margin-bottom:32px">A software engineer's AI workflow</div>
       <h1 class="display anim-up d3"><span class="gold">Vive</span>coding<span class="crit">.</span></h1>
       <div class="body-lg anim-up d4" style="max-width:34ch;margin-top:36px;color:var(--muted)">
-        Cómo entregué <span class="gold">en 1 mes</span> lo que solía tomar <span class="crit">6</span> — sin saltarme la disciplina de ingeniería.
+        Cómo entregué <span class="gold">en 1 mes</span> lo que solía tomar <span class="crit">6</span> - sin saltarme la disciplina de ingeniería.
       </div>
     </div>
 
@@ -393,7 +393,7 @@
       I kept saying <span style="text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:18px;text-decoration-thickness:8px">vivecoding</span>.
     </h2>
     <div class="body-lg anim-up d5" style="max-width:36ch;color:var(--muted);margin-top:24px">
-      Turns out — once I looked at what I actually do —<br>
+      Turns out - once I looked at what I actually do -<br>
       <span class="gold" style="font-weight:600">I was right by accident.</span>
     </div>
   </div>
@@ -435,7 +435,7 @@
         <li><span class="b"></span><span>Multi-model cross-check. Right model, right job.</span></li>
         <li><span class="b"></span><span>TDD strict. Pure modules. Authz invariants.</span></li>
         <li><span class="b"></span><span>Code review baked into every PR.</span></li>
-        <li><span class="b"></span><span>The AI amplifies the engineer — not the other way around.</span></li>
+        <li><span class="b"></span><span>The AI amplifies the engineer - not the other way around.</span></li>
       </ul>
     </div>
   </div>
@@ -482,7 +482,7 @@
         <div class="name mana">Bard</div>
       </div>
       <div class="role">The grounding agent. Lands me when I'm spiraling. Pushes back when a request will create more debt than value.</div>
-      <div class="stat">"not tonight" — circa every session</div>
+      <div class="stat">"not tonight" - circa every session</div>
     </div>
 
     <!-- Auditor -->
@@ -720,7 +720,7 @@
       </g>
     </svg>
 
-    <div class="rune-divider anim-fade d8">— &nbsp; same workflow you learned in school. now executable. &nbsp; —</div>
+    <div class="rune-divider anim-fade d8">- &nbsp; same workflow you learned in school. now executable. &nbsp; -</div>
   </div>
 
   <div class="chrome-bot"><span>vivecoding.dev</span><span>07 / 19</span></div>
@@ -740,7 +740,7 @@
     </div>
     <div class="cmd anim-pop d3">
       <div class="ln"><span class="gold">/sdd-continue</span> [change]</div>
-      <div class="desc">Runs whatever phase is next-ready in the DAG. You stop deciding "what's next" — the orchestrator already knows.</div>
+      <div class="desc">Runs whatever phase is next-ready in the DAG. You stop deciding "what's next" - the orchestrator already knows.</div>
     </div>
     <div class="cmd anim-pop d4">
       <div class="ln"><span class="gold">/sdd-ff</span> &lt;name&gt;</div>
@@ -748,16 +748,16 @@
     </div>
   </div>
 
-  <div class="rune-divider" style="margin-top:48px">— &nbsp; methodology becomes a tool when the friction goes to zero &nbsp; —</div>
+  <div class="rune-divider" style="margin-top:48px">- &nbsp; methodology becomes a tool when the friction goes to zero &nbsp; -</div>
 
   <div class="chrome-bot"><span>vivecoding.dev</span><span>08 / 19</span></div>
 </section>
 
-<!-- 09 HANDS-ON 1 — ASTRO -->
+<!-- 09 HANDS-ON 1 - ASTRO -->
 <section data-screen-label="09 Hands-on Astro">
   <div class="chrome-top"><span><span class="dot"></span>Slide 09 · Hands-on 1</span><span>practice · 15 min</span></div>
 
-  <div class="meta anim-fade" style="margin-bottom:18px">Practice 1 — 15 minutes</div>
+  <div class="meta anim-fade" style="margin-bottom:18px">Practice 1 - 15 minutes</div>
   <h2 class="h1 anim-up d1" style="margin-bottom:48px">Astro Portfolio<br><span class="gold">on Cloudflare Workers.</span></h2>
 
   <div class="grid-2" style="flex:1;gap:56px">
@@ -801,11 +801,11 @@
   <div class="chrome-bot"><span>vivecoding.dev</span><span>09 / 19</span></div>
 </section>
 
-<!-- 10 HANDS-ON 2 — BIBLIOTECA CRUD -->
+<!-- 10 HANDS-ON 2 - BIBLIOTECA CRUD -->
 <section data-screen-label="10 Hands-on CRUD">
   <div class="chrome-top"><span><span class="dot"></span>Slide 10 · Hands-on 2</span><span>practice · 25 min</span></div>
 
-  <div class="meta anim-fade" style="margin-bottom:18px">Practice 2 — 25 minutes</div>
+  <div class="meta anim-fade" style="margin-bottom:18px">Practice 2 - 25 minutes</div>
   <h2 class="h1 anim-up d1" style="margin-bottom:40px">Biblioteca CRUD<br><span class="gold">Workers + D1 + Durable Objects.</span></h2>
 
   <div class="grid-2" style="flex:1;gap:56px">
@@ -820,7 +820,7 @@
         <div class="desc" style="font-size:18px;margin-top:14px">→ localhost:8787</div>
       </div>
       <div class="body-lg" style="max-width:none;font-size:24px;line-height:1.4">
-        Three Cloudflare free-tier primitives, one project. Auth, SQL, and consistent state — without external services.
+        Three Cloudflare free-tier primitives, one project. Auth, SQL, and consistent state - without external services.
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">
         <span class="chip mana">Workers</span>
@@ -835,11 +835,11 @@
       <div style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.2em;color:#6a4c1a;text-transform:uppercase">Cloudflare Free Tier</div>
       <div style="font-family:'Space Grotesk';font-size:26px;font-weight:600;margin-top:8px;color:#2a1d0d;line-height:1.25">A whole class can hammer this. Zero cost.</div>
       <ul style="font-size:20px;line-height:1.6;color:#2a1d0d;margin-top:18px;padding-left:20px">
-        <li><b>Workers</b> — 100,000 requests / day</li>
-        <li><b>D1</b> — 5 GB · 25M reads / day · 50k writes / day</li>
-        <li><b>Durable Objects</b> — 1M requests / month</li>
-        <li><b>R2</b> — 10 GB object storage</li>
-        <li><b>KV</b> — 100k reads / day</li>
+        <li><b>Workers</b> - 100,000 requests / day</li>
+        <li><b>D1</b> - 5 GB · 25M reads / day · 50k writes / day</li>
+        <li><b>Durable Objects</b> - 1M requests / month</li>
+        <li><b>R2</b> - 10 GB object storage</li>
+        <li><b>KV</b> - 100k reads / day</li>
       </ul>
       <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#6a4c1a;margin-top:14px;letter-spacing:.15em;text-transform:uppercase">No credit card required · permanent free tier</div>
     </div>
@@ -897,7 +897,7 @@
 <section data-screen-label="12 ITALPortal">
   <div class="chrome-top"><span><span class="dot"></span>Slide 12 · Case Study</span><span>real · multi-tenant · production</span></div>
 
-  <div class="meta anim-fade" style="margin-bottom:18px">A real project — not a toy app</div>
+  <div class="meta anim-fade" style="margin-bottom:18px">A real project - not a toy app</div>
   <h2 class="h1 anim-up d1" style="margin-bottom:48px"><span class="gold">ITALPortal.</span><br>The CISO's operational portal.</h2>
 
   <div class="grid-2" style="flex:1;gap:56px">
@@ -935,12 +935,12 @@
       <div style="font-family:'Space Grotesk';font-size:30px;font-weight:600;margin-top:8px;color:#2a1d0d;line-height:1.2">In a single day:</div>
       <ul style="font-size:22px;line-height:1.5;color:#2a1d0d;margin-top:18px;padding-left:20px">
         <li>SDD init complete · skill registry · openspec bootstrap</li>
-        <li><b>tickets-custom-statuses</b> — 22 tasks, 12 tests, KV cache 24h</li>
-        <li><b>recurring-tasks-toggle</b> — 17 tests, pure module extracted</li>
+        <li><b>tickets-custom-statuses</b> - 22 tasks, 12 tests, KV cache 24h</li>
+        <li><b>recurring-tasks-toggle</b> - 17 tests, pure module extracted</li>
         <li>Privilege-escalation closed in <code>requireOrgAdmin()</code></li>
         <li>AI module deleted (TODO finally honored)</li>
       </ul>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#6a4c1a;margin-top:18px;letter-spacing:.15em;text-transform:uppercase">Next session: Emma overhaul — 78 tests passing</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#6a4c1a;margin-top:18px;letter-spacing:.15em;text-transform:uppercase">Next session: Emma overhaul - 78 tests passing</div>
     </div>
   </div>
 
@@ -1002,7 +1002,7 @@
       </div>
       <div style="margin-top:30px;padding:24px;border-left:4px solid var(--gold);background:rgba(246,196,83,.05);border-radius:8px">
         <div class="quote gold" style="font-size:32px">"Looked intentional. After audit, confirmed real CVE."</div>
-        <div class="obs" style="margin-top:10px">— RAG memory, obs#110</div>
+        <div class="obs" style="margin-top:10px">- RAG memory, obs#110</div>
       </div>
     </div>
   </div>
@@ -1028,7 +1028,7 @@
         <b class="crit">No ownership check.</b>
       </div>
       <div class="body-lg" style="max-width:none;color:var(--muted);margin-top:28px;line-height:1.35">
-        A user in org A could ask Emma for a ticket from org B — and Emma would hand it over.
+        A user in org A could ask Emma for a ticket from org B - and Emma would hand it over.
       </div>
     </div>
 
@@ -1036,11 +1036,11 @@
       <div class="corner">obs#268</div>
       <div class="meta potion" style="margin-bottom:18px">How the system caught it</div>
       <div class="body-lg" style="max-width:none">
-        Caught during the security audit phase of the Emma overhaul — <b class="potion">before production</b>. Fix: replicate the access control from the REST endpoint inside the tool.
+        Caught during the security audit phase of the Emma overhaul - <b class="potion">before production</b>. Fix: replicate the access control from the REST endpoint inside the tool.
       </div>
       <div style="margin-top:30px;padding:24px;border-left:4px solid var(--gold);background:rgba(246,196,83,.05);border-radius:8px">
         <div class="quote gold" style="font-size:32px">"Forget this and you leak data cross-tenant. Period."</div>
-        <div class="obs" style="margin-top:10px">— RAG memory, obs#268</div>
+        <div class="obs" style="margin-top:10px">- RAG memory, obs#268</div>
       </div>
     </div>
   </div>
@@ -1094,7 +1094,7 @@
       <div class="n">02</div>
       <div>
         <div class="t" style="font-size:32px">One model is <span class="crit">never</span> the right answer.</div>
-        <div class="s" style="font-size:20px;margin-top:6px">Each model has a strength. The mix is the moat. Plan, build, audit — different agents.</div>
+        <div class="s" style="font-size:20px;margin-top:6px">Each model has a strength. The mix is the moat. Plan, build, audit - different agents.</div>
       </div>
     </div>
     <div class="take anim-right d4" style="padding:22px 0">
@@ -1114,7 +1114,7 @@
     <div class="take anim-right d6" style="padding:22px 0">
       <div class="n">05</div>
       <div>
-        <div class="t" style="font-size:32px">The AI is your <span class="mana">junior</span> — not your genius.</div>
+        <div class="t" style="font-size:32px">The AI is your <span class="mana">junior</span> - not your genius.</div>
         <div class="s" style="font-size:20px;margin-top:6px">You wouldn't merge a junior's PR without reading it. Don't merge the AI's either.</div>
       </div>
     </div>
@@ -1134,7 +1134,7 @@
     <div class="card anim-pop d2" style="padding:48px;display:flex;flex-direction:column;gap:24px;border-color:rgba(61,220,151,.35)">
       <div class="meta potion">01 · The Thesis</div>
       <div class="h3" style="font-size:48px;line-height:1.05;font-weight:700">Discipline beats <span class="potion">vibes.</span></div>
-      <div class="body-lg" style="font-size:24px;color:var(--muted);max-width:none">Specs, design, TDD, verify. The classical SDLC — just executable now.</div>
+      <div class="body-lg" style="font-size:24px;color:var(--muted);max-width:none">Specs, design, TDD, verify. The classical SDLC - just executable now.</div>
     </div>
     <div class="card anim-pop d3" style="padding:48px;display:flex;flex-direction:column;gap:24px;border-color:rgba(246,196,83,.35)">
       <div class="meta gold">02 · The Stack</div>
@@ -1148,7 +1148,7 @@
     </div>
   </div>
 
-  <div class="rune-divider anim-fade d5" style="margin-top:48px">— &nbsp; vibecoding is improvisation. vivecoding is engineering. &nbsp; —</div>
+  <div class="rune-divider anim-fade d5" style="margin-top:48px">- &nbsp; vibecoding is improvisation. vivecoding is engineering. &nbsp; -</div>
 
   <div class="chrome-bot"><span>vivecoding.dev</span><span>18 / 19</span></div>
 </section>
@@ -1172,7 +1172,7 @@
       <div class="meta anim-fade d2" style="margin-bottom:32px">End of session</div>
       <h1 class="display anim-up d3"><span class="gold">Thanks</span><span class="crit">.</span></h1>
       <div class="body-lg anim-up d4" style="max-width:34ch;margin-top:36px;color:var(--muted);font-size:38px">
-        Now — <span class="gold" style="font-weight:600">questions.</span><br>Disagree publicly. I'll listen.
+        Now - <span class="gold" style="font-weight:600">questions.</span><br>Disagree publicly. I'll listen.
       </div>
     </div>
 

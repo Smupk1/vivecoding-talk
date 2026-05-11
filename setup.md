@@ -35,14 +35,14 @@ gh auth login
 
 ### 4. Cuenta en Cloudflare (gratuita)
 
-[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) — solo para el bloque de deploy. **No piden tarjeta** para el plan free.
+[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) - solo para el bloque de deploy. **No piden tarjeta** para el plan free.
 
 ### 5. Editor con plugin para AI coding (opcional pero ideal)
 
 Elige UNA:
-- **[Cursor](https://cursor.sh/)** — VS Code fork con AI integrado (recomendado para el workshop)
-- **[VS Code + Continue](https://www.continue.dev/)** — alternativa open-source
-- **[Claude Code](https://www.anthropic.com/claude-code)** — CLI agéntico
+- **[Cursor](https://cursor.sh/)** - VS Code fork con AI integrado (recomendado para el workshop)
+- **[VS Code + Continue](https://www.continue.dev/)** - alternativa open-source
+- **[Claude Code](https://www.anthropic.com/claude-code)** - CLI agéntico
 
 ### 6. Clonar los repos (hazlo en casa)
 
@@ -60,13 +60,13 @@ cd biblioteca-cloudflare-demo && pnpm install && cd ..
 
 ```bash
 cd ~/workshop/astro-portfolio-demo && pnpm dev
-# debería levantar en localhost:4321 — Ctrl+C para cortar
+# debería levantar en localhost:4321 - Ctrl+C para cortar
 
 cd ~/workshop/biblioteca-cloudflare-demo
 pnpm db:migrate:local
 pnpm db:seed:local
 pnpm dev
-# debería levantar en localhost:8787 — Ctrl+C para cortar
+# debería levantar en localhost:8787 - Ctrl+C para cortar
 ```
 
 Si los dos comandos arrancaron sin error, estás listo. ✅
@@ -104,14 +104,14 @@ gh auth login
 
 ### 4. Cloudflare account (free)
 
-[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) — only for the deploy block. **No credit card required** for the free plan.
+[dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up) - only for the deploy block. **No credit card required** for the free plan.
 
 ### 5. AI-enabled editor (optional but ideal)
 
 Pick ONE:
-- **[Cursor](https://cursor.sh/)** — VS Code fork with AI built-in (recommended for the workshop)
-- **[VS Code + Continue](https://www.continue.dev/)** — open-source alternative
-- **[Claude Code](https://www.anthropic.com/claude-code)** — agentic CLI
+- **[Cursor](https://cursor.sh/)** - VS Code fork with AI built-in (recommended for the workshop)
+- **[VS Code + Continue](https://www.continue.dev/)** - open-source alternative
+- **[Claude Code](https://www.anthropic.com/claude-code)** - agentic CLI
 
 ### 6. Clone the repos (at home)
 
@@ -129,13 +129,13 @@ cd biblioteca-cloudflare-demo && pnpm install && cd ..
 
 ```bash
 cd ~/workshop/astro-portfolio-demo && pnpm dev
-# should start on localhost:4321 — Ctrl+C to stop
+# should start on localhost:4321 - Ctrl+C to stop
 
 cd ~/workshop/biblioteca-cloudflare-demo
 pnpm db:migrate:local
 pnpm db:seed:local
 pnpm dev
-# should start on localhost:8787 — Ctrl+C to stop
+# should start on localhost:8787 - Ctrl+C to stop
 ```
 
 If both started without error, you're set. ✅

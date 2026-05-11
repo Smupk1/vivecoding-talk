@@ -1,11 +1,11 @@
 # Vivecoding · University Workshop
 
-**Workshop universitario de 90 minutos** sobre Vivecoding — la metodología de ingeniería asistida por IA que practico en IT Audit Labs.
+**Workshop universitario de 90 minutos** sobre Vivecoding - la metodología de ingeniería asistida por IA que practico en IT Audit Labs.
 
 Este repo es la versión **académica** del manifiesto que vive en [vivecoding.dev/writing/vibecoding-vs-vivecoding](https://vivecoding.dev/writing/vibecoding-vs-vivecoding), adaptada para estudiantes universitarios de CS, años superiores. Usa dos proyectos reales como práctica hands-on:
 
-- 🎨 [`astro-portfolio-demo`](https://github.com/Smupk1/astro-portfolio-demo) — sitio estático en Astro deployado a Cloudflare Workers
-- 📚 [`biblioteca-cloudflare-demo`](https://github.com/Smupk1/biblioteca-cloudflare-demo) — CRUD full-stack con Workers + D1 + Durable Objects
+- 🎨 [`astro-portfolio-demo`](https://github.com/Smupk1/astro-portfolio-demo) - sitio estático en Astro deployado a Cloudflare Workers
+- 📚 [`biblioteca-cloudflare-demo`](https://github.com/Smupk1/biblioteca-cloudflare-demo) - CRUD full-stack con Workers + D1 + Durable Objects
 
 > **La tesis**: Vibecoding es improvisación. Vivecoding es ingeniería.
 
@@ -26,8 +26,8 @@ vivecoding-talk/
 
 **Dos versiones del deck**, según la audiencia del evento:
 
-- **`deck/index.html`** — versión en inglés
-- **`deck/index-es.html`** — versión en español (colombiano profesional)
+- **`deck/index.html`** - versión en inglés
+- **`deck/index-es.html`** - versión en español (colombiano profesional)
 
 Ambos usan el mismo `deck-stage.js`, el mismo estilo visual, las mismas animaciones y las mismas tipografías (Space Grotesk + JetBrains Mono) que el deck oficial de Vivecoding en [vivecoding.dev](https://vivecoding.dev).
 
@@ -57,13 +57,13 @@ Ambos usan el mismo `deck-stage.js`, el mismo estilo visual, las mismas animacio
 | 18 | Three Takeaways | Tesis · Stack · Math |
 | 19 | Thanks · Q&A | Cierre |
 
-Los slides 09-11 son **nuevos respecto al deck oficial** — adaptados para el contexto universitario y para integrar los dos repos de práctica.
+Los slides 09-11 son **nuevos respecto al deck oficial** - adaptados para el contexto universitario y para integrar los dos repos de práctica.
 
 ---
 
 ## Cómo presentar el deck
 
-El deck es **HTML standalone** — no necesita Marp, Reveal, ni ningún sistema externo.
+El deck es **HTML standalone** - no necesita Marp, Reveal, ni ningún sistema externo.
 
 ### Localmente
 
@@ -97,7 +97,7 @@ Abre el deck en Chrome, fullscreen, y usa `Cmd+P` → "Save as PDF" con orientac
 1. **Una semana antes**: manda `setup.md` a los estudiantes para que vengan con todo instalado.
 2. **El día**: abre el deck en un monitor; las notas en el otro (o ventana aparte con `?notes`).
 3. **En los hands-on (slides 9-11)**: pide que cloneen ANTES de cada bloque. `pnpm install` come tiempo en aula.
-4. **Cuando alguien pregunte algo que no sabes**: dilo. Es parte del mensaje — vivecoding bien hecho incluye admitir lo que no sabes.
+4. **Cuando alguien pregunte algo que no sabes**: dilo. Es parte del mensaje - vivecoding bien hecho incluye admitir lo que no sabes.
 
 ---
 
@@ -111,10 +111,10 @@ Esta charla es la versión académica. El manifiesto técnico completo, con el D
 
 ## Licencia
 
-MIT — clona, adapta, dicta esta charla en tu universidad.
+MIT - clona, adapta, dicta esta charla en tu universidad.
 
 ---
 
 > *Vibecoding es improvisación. Vivecoding es ingeniería.*
 >
-> — **Samuel Cala**, IT Audit Labs · [vivecoding.dev](https://vivecoding.dev)
+> - **Samuel Cala**, IT Audit Labs · [vivecoding.dev](https://vivecoding.dev)
