@@ -7,20 +7,7 @@ Este repo es la versión **académica** del manifiesto que vive en [vivecoding.d
 - 🎨 [`astro-portfolio-demo`](https://github.com/Smupk1/astro-portfolio-demo) — sitio estático en Astro deployado a Cloudflare Workers
 - 📚 [`biblioteca-cloudflare-demo`](https://github.com/Smupk1/biblioteca-cloudflare-demo) — CRUD full-stack con Workers + D1 + Durable Objects
 
-> **La tesis**: Vibecoding es roleplay. Vivecoding es una campaña con disciplina.
-
----
-
-## Por qué este workshop existe
-
-La industria está dividida entre dos campos extremos sobre la IA en ingeniería:
-
-- **Los evangelistas**: *"prompt and ship, el código no importa"*
-- **Los puristas**: *"no toques la IA, vas a perder los fundamentos"*
-
-**Vivecoding** es la tercera vía: tratar a la IA como el junior más poderoso que has manejado, y aplicarle el mismo rigor de ingeniería que aplicarías a cualquier otro contribuidor.
-
-Este workshop le enseña a estudiantes universitarios cómo construir con IA **sin saltarse los fundamentos**.
+> **La tesis**: Vibecoding es improvisación. Vivecoding es ingeniería.
 
 ---
 
@@ -28,68 +15,79 @@ Este workshop le enseña a estudiantes universitarios cómo construir con IA **s
 
 ```
 vivecoding-talk/
-├── slides-es.md         # Deck en español (Marp)
-├── slides-en.md         # Deck en inglés (Marp)
-├── speaker-notes-es.md  # Guion ampliado: qué decir en cada bloque
-├── speaker-notes-en.md  # Speaker notes in English
+├── deck/
+│   ├── index.html       # Deck HTML standalone (19 slides)
+│   └── deck-stage.js    # Motor de navegación + animaciones
 ├── setup.md             # Prerequisites bilingüe para estudiantes
+├── LICENSE
 └── README.md
 ```
 
+El deck está construido sobre el mismo formato HTML/CSS/JS que el deck oficial de Vivecoding en [vivecoding.dev](https://vivecoding.dev) — mismo estilo visual, mismas animaciones, mismas tipografías (Space Grotesk + JetBrains Mono).
+
 ---
 
-## Estructura del workshop (90 min)
+## Estructura del workshop (90 min · 19 slides)
 
-| Min | Bloque | Contenido |
+| # | Slide | Bloque |
 |---|---|---|
-| 0-5 | **Setup** | Verificar que todos arranquen `pnpm dev` |
-| 5-10 | **Cold open** | *"Did you vibe code it?"* — la historia del whiteboard |
-| 10-20 | **Acto I: Vibecoding vs Vivecoding** | El cuadro comparativo. La tesis. |
-| 20-30 | **Acto II: El stack** | Multi-modelo. Pipeline SDD. Cómo escala. |
-| 30-45 | **Práctica 1: Astro Portfolio** | Hands-on. Islands architecture. |
-| 45-70 | **Práctica 2: Biblioteca CRUD** | Workers + D1 + DO. *"Every AI tool is an authenticated endpoint."* |
-| 70-78 | **Casos de estudio** | Las 2 CVEs reales cazadas en 48 horas |
-| 78-82 | **Las 5 scars** | Si una charla solo muestra wins, te están vendiendo algo |
-| 82-87 | **Las 5 reglas** | Specs · Multi-modelo · Design is code · Verify · La IA es tu junior |
-| 87-90 | **El número + cierre** | 6 meses → 1 mes. Tres takeaways. |
+| 01 | Title | Apertura |
+| 02 | The Confession | "For years I pronounced it vibecoding" |
+| 03 | The Thesis | Vibecoding vs Vivecoding |
+| 04 | Specialized Agents | RAG memory · Bard · Auditor |
+| 05 | SDD Agents | explore · spec · design · apply · verify |
+| 06 | The Stack | Gemini · Claude · Workers AI · Codex · CodeRabbit |
+| 07 | The SDD Workflow | El DAG |
+| 08 | Meta-commands | `/sdd-new` · `/sdd-continue` · `/sdd-ff` |
+| **09** | **Hands-on 1: Astro Portfolio** | 15 min de práctica |
+| **10** | **Hands-on 2: Biblioteca CRUD** | 25 min de práctica |
+| **11** | **DO + AI Tool Security** | Por qué DO, every AI tool is auth'd |
+| 12 | ITALPortal | Case study real |
+| 13 | The Number | 6 meses → 1 mes |
+| 14 | CVE #1 | `requireOrgAdmin()` privilege escalation |
+| 15 | CVE #2 | Cross-tenant leak en AI tool |
+| 16 | The Honest Scars | 5 cosas que no salieron bien |
+| 17 | Hot Takes | Las 5 reglas |
+| 18 | Three Takeaways | Tesis · Stack · Math |
+| 19 | Thanks · Q&A | Cierre |
+
+Los slides 09-11 son **nuevos respecto al deck oficial** — adaptados para el contexto universitario y para integrar los dos repos de práctica.
 
 ---
 
-## Cómo exportar las slides
+## Cómo presentar el deck
 
-Las slides están en **[Marp](https://marp.app/)** — Markdown que se renderiza a PDF/HTML/PPTX.
+El deck es **HTML standalone** — no necesita Marp, Reveal, ni ningún sistema externo.
 
-### Opción A: VS Code (recomendado para iterar)
-
-1. Instalar la extensión **[Marp for VS Code](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode)**
-2. Abrir `slides-es.md`
-3. Click en "Open Preview to the Side"
-4. Exportar: paleta de comandos → "Marp: Export slide deck..." → PDF / HTML / PPTX
-
-### Opción B: CLI
+### Localmente
 
 ```bash
-# Instalar Marp CLI
-pnpm add -g @marp-team/marp-cli
-
-# Exportar a PDF
-marp slides-es.md --pdf
-
-# Exportar a HTML standalone (ideal para presentar)
-marp slides-es.md --html
-
-# Exportar a PowerPoint editable
-marp slides-es.md --pptx
+cd deck
+python3 -m http.server 8000
+# Abre http://localhost:8000 en el navegador
 ```
+
+### Cómo navegar
+
+- **Flechas ← →** para cambiar de slide
+- **Espacio** para avanzar
+- **F** para fullscreen
+- **N** para abrir el panel de speaker notes
+
+Las notas del orador están embebidas en el HTML (`<script id="speaker-notes">`) y aparecen al presionar `N` o en una segunda ventana si abres la URL con `?notes`.
+
+### Para exportar a PDF
+
+Abre el deck en Chrome, fullscreen, y usa `Cmd+P` → "Save as PDF" con orientación horizontal. Cada slide es 1920×1080.
 
 ---
 
 ## Cómo dar la charla
 
-1. **Una semana antes**: mandar `setup.md` a los estudiantes para que vengan con todo instalado.
-2. **El día**: abrir `speaker-notes-es.md` en un monitor secundario; la deck en el principal.
-3. **En los hands-on (bloques 4 y 5)**: pedirles que cloneen ANTES de cada bloque, no durante — `pnpm install` come tiempo en aula.
-4. **Cuando alguien pregunte algo que no sé**: decirlo. Es parte del mensaje — vivecoding bien hecho incluye admitir lo que no sabes.
+1. **Una semana antes**: manda `setup.md` a los estudiantes para que vengan con todo instalado.
+2. **El día**: abre el deck en un monitor; las notas en el otro (o ventana aparte con `?notes`).
+3. **En los hands-on (slides 9-11)**: pide que cloneen ANTES de cada bloque. `pnpm install` come tiempo en aula.
+4. **Cuando alguien pregunte algo que no sabes**: dilo. Es parte del mensaje — vivecoding bien hecho incluye admitir lo que no sabes.
 
 ---
 
@@ -103,10 +101,10 @@ Esta charla es la versión académica. El manifiesto técnico completo, con el D
 
 ## Licencia
 
-MIT — clona, adapta, dicta esta charla en tu universidad. Si la usas, me alegra saber dónde.
+MIT — clona, adapta, dicta esta charla en tu universidad.
 
 ---
 
-> *Vibecoding es roleplay. Vivecoding es una campaña con disciplina.*
+> *Vibecoding es improvisación. Vivecoding es ingeniería.*
 >
 > — **Samuel Cala**, IT Audit Labs · [vivecoding.dev](https://vivecoding.dev)
