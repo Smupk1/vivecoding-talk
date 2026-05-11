@@ -16,14 +16,20 @@ Este repo es la versión **académica** del manifiesto que vive en [vivecoding.d
 ```
 vivecoding-talk/
 ├── deck/
-│   ├── index.html       # Deck HTML standalone (19 slides)
-│   └── deck-stage.js    # Motor de navegación + animaciones
+│   ├── index.html       # Deck en inglés (19 slides)
+│   ├── index-es.html    # Deck en español (19 slides, contenido idéntico)
+│   └── deck-stage.js    # Motor de navegación + animaciones (compartido)
 ├── setup.md             # Prerequisites bilingüe para estudiantes
 ├── LICENSE
 └── README.md
 ```
 
-El deck está construido sobre el mismo formato HTML/CSS/JS que el deck oficial de Vivecoding en [vivecoding.dev](https://vivecoding.dev) — mismo estilo visual, mismas animaciones, mismas tipografías (Space Grotesk + JetBrains Mono).
+**Dos versiones del deck**, según la audiencia del evento:
+
+- **`deck/index.html`** — versión en inglés
+- **`deck/index-es.html`** — versión en español (colombiano profesional)
+
+Ambos usan el mismo `deck-stage.js`, el mismo estilo visual, las mismas animaciones y las mismas tipografías (Space Grotesk + JetBrains Mono) que el deck oficial de Vivecoding en [vivecoding.dev](https://vivecoding.dev).
 
 ---
 
@@ -64,7 +70,11 @@ El deck es **HTML standalone** — no necesita Marp, Reveal, ni ningún sistema 
 ```bash
 cd deck
 python3 -m http.server 8000
-# Abre http://localhost:8000 en el navegador
+
+# Inglés:
+# http://localhost:8000/index.html
+# Español:
+# http://localhost:8000/index-es.html
 ```
 
 ### Cómo navegar
